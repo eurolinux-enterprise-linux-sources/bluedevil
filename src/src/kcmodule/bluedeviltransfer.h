@@ -44,10 +44,9 @@ public:
 
     virtual void save();
 private Q_SLOTS:
-    void defaultAdapterChanged(Adapter *adapter);
+    void usableAdapterChanged(Adapter *adapter);
     void adapterDiscoverableChanged();
     void updateInformationState();
-    void showSharedFilesDialog();
     void changed(bool);
 
 private:

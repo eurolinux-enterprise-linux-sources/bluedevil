@@ -49,8 +49,7 @@ public:
     };
 
 public Q_SLOTS:
-    void noAdapters(Adapter *adapter);
-    void adapterAdded();
+    void adapterChanged();
 
     void regenerateDeviceEntries();
     /**
@@ -66,11 +65,9 @@ public Q_SLOTS:
     void activeDiscoverable(bool active);
 
 private Q_SLOTS:
-    void browseTriggered();
-    void sendTriggered();
-    void connectTriggered();
-    void disconnectTriggered();
-    void propertyChanged(const QString &key, const QDBusVariant &value);
+    void actionTriggered();
+    void browseTriggered(QString address);
+    void sendTriggered(const QString &ubi);
     void UUIDsChanged(const QStringList &UUIDs);
     void poweredChanged();
     void deviceCreated(Device *device);
@@ -78,13 +75,17 @@ private Q_SLOTS:
 private:
     void onlineMode();
     void offlineMode();
+    void setupDevice(Device *device);
 
     /**
      * Returns true or false wether there are powered adapters
      */
     bool poweredAdapters();
     void setTooltipTitleStatus(bool);
+    QList<QAction*> actionsForAdapter(Adapter *adapter);
+    QAction* actionForDevice(Device *device, Device *lastDevice);
 private:
+    QHash<QString, QString> m_supportedServices;
     QMap<void*, KAction*> m_interfaceMap;
     QList<QAction*>       m_actions;
 };

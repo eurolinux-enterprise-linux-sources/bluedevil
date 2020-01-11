@@ -1,0 +1,160 @@
+From 21f1f3861d5d7a4e4a9c83d1d109d37713191b65 Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Mon, 29 Dec 2014 12:24:37 +0100
+Subject: [PATCH 04/20] obexftpdaemon: session() method now takes target
+ parameter
+
+This way it is now possible to create other session than only
+"ftp". This is needed to be able to create "pcsuite" sessions.
+
+Also address parameter of session() method is now taken
+in correct form (uppercase colon separated).
+---
+ src/kio/obexftp/daemon/ObexFtpDaemon.cpp    | 8 +++-----
+ src/kio/obexftp/daemon/ObexFtpDaemon.h      | 2 +-
+ src/kio/obexftp/daemon/createsessionjob.cpp | 7 ++++---
+ src/kio/obexftp/daemon/createsessionjob.h   | 5 +++--
+ src/kio/obexftp/kded_obexftp.xml            | 1 +
+ src/kio/obexftp/kio_obexftp.cpp             | 3 ++-
+ 6 files changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/src/kio/obexftp/daemon/ObexFtpDaemon.cpp b/src/kio/obexftp/daemon/ObexFtpDaemon.cpp
+index 782f8d3..d811291 100644
+--- a/src/kio/obexftp/daemon/ObexFtpDaemon.cpp
++++ b/src/kio/obexftp/daemon/ObexFtpDaemon.cpp
+@@ -123,15 +123,13 @@ bool ObexFtpDaemon::isOnline()
+     return d->m_status == Private::Online;
+ }
+ 
+-QString ObexFtpDaemon::session(QString address, const QDBusMessage& msg)
++QString ObexFtpDaemon::session(const QString &address, const QString &target, const QDBusMessage& msg)
+ {
+-    address.replace("-", ":");
+-
+     if (d->m_sessionMap.contains(address)) {
+         return d->m_sessionMap[address];
+     }
+ 
+-    kDebug(dobex()) << "Creating session for" << address;
++    kDebug(dobex()) << "Creating session for" << address << "target" << target;
+ 
+     // At this point we always want delayed reply
+     msg.setDelayedReply(true);
+@@ -141,7 +139,7 @@ QString ObexFtpDaemon::session(QString address, const QDBusMessage& msg)
+         return QString();
+     }
+ 
+-    CreateSessionJob *job = new CreateSessionJob(address, msg);
++    CreateSessionJob *job = new CreateSessionJob(address, target, msg);
+     connect(job, SIGNAL(finished(KJob*)), SLOT(sessionCreated(KJob*)));
+     job->start();
+ 
+diff --git a/src/kio/obexftp/daemon/ObexFtpDaemon.h b/src/kio/obexftp/daemon/ObexFtpDaemon.h
+index d06b391..e58a74d 100644
+--- a/src/kio/obexftp/daemon/ObexFtpDaemon.h
++++ b/src/kio/obexftp/daemon/ObexFtpDaemon.h
+@@ -39,7 +39,7 @@ public:
+ 
+ public Q_SLOTS:
+     Q_SCRIPTABLE bool isOnline();
+-    Q_SCRIPTABLE QString session(QString address, const QDBusMessage &msg);
++    Q_SCRIPTABLE QString session(const QString &address, const QString &target, const QDBusMessage &msg);
+     Q_SCRIPTABLE bool cancelTransfer(const QString &transfer);
+ 
+ private Q_SLOTS:
+diff --git a/src/kio/obexftp/daemon/createsessionjob.cpp b/src/kio/obexftp/daemon/createsessionjob.cpp
+index e84f8ee..883fe11 100644
+--- a/src/kio/obexftp/daemon/createsessionjob.cpp
++++ b/src/kio/obexftp/daemon/createsessionjob.cpp
+@@ -25,9 +25,10 @@
+ #include <KDebug>
+ 
+ // class
+-CreateSessionJob::CreateSessionJob(const QString& address, const QDBusMessage& msg, QObject* parent)
++CreateSessionJob::CreateSessionJob(const QString &address, const QString &target, const QDBusMessage &msg, QObject *parent)
+     : KJob(parent)
+     , m_address(address)
++    , m_target(target)
+     , m_client(0)
+ {
+     m_messages.append(msg);
+@@ -53,7 +54,7 @@ void CreateSessionJob::addMessage(const QDBusMessage& msg)
+     m_messages.append(msg);
+ }
+ 
+-const QList< QDBusMessage > CreateSessionJob::messages() const
++const QList<QDBusMessage> CreateSessionJob::messages() const
+ {
+     return m_messages;
+ }
+@@ -62,7 +63,7 @@ void CreateSessionJob::createSession()
+ {
+     kDebug(dobex());
+     QVariantMap args;
+-    args["Target"] = "ftp";
++    args["Target"] = m_target;
+     m_client = new OrgBluezObexClient1Interface("org.bluez.obex",
+                                                 "/org/bluez/obex",
+                                                 QDBusConnection::sessionBus(), this);
+diff --git a/src/kio/obexftp/daemon/createsessionjob.h b/src/kio/obexftp/daemon/createsessionjob.h
+index a457b02..667384b 100644
+--- a/src/kio/obexftp/daemon/createsessionjob.h
++++ b/src/kio/obexftp/daemon/createsessionjob.h
+@@ -29,7 +29,7 @@ class CreateSessionJob : public KJob
+ {
+     Q_OBJECT
+ public:
+-    explicit CreateSessionJob(const QString &address, const QDBusMessage &msg, QObject* parent = 0);
++    explicit CreateSessionJob(const QString &address, const QString &target, const QDBusMessage &msg, QObject *parent = 0);
+ 
+     virtual void start();
+     QString path();
+@@ -44,9 +44,10 @@ private Q_SLOTS:
+ private:
+     QString m_path;
+     QString m_address;
++    QString m_target;
+     QList<QDBusMessage> m_messages;
+ 
+     OrgBluezObexClient1Interface* m_client;
+ };
+ 
+-#endif //CREATE_SESSION_JOB_H
+\ No newline at end of file
++#endif //CREATE_SESSION_JOB_H
+diff --git a/src/kio/obexftp/kded_obexftp.xml b/src/kio/obexftp/kded_obexftp.xml
+index ec718e6..06e3b14 100644
+--- a/src/kio/obexftp/kded_obexftp.xml
++++ b/src/kio/obexftp/kded_obexftp.xml
+@@ -8,6 +8,7 @@
+     </method>
+     <method name="session">
+       <arg name="address" type="s" direction="in"/>
++      <arg name="target" type="s" direction="in"/>
+       <arg name="sessionPath" type="s" direction="out"/>
+     </method>
+     <method name="cancelTransfer">
+diff --git a/src/kio/obexftp/kio_obexftp.cpp b/src/kio/obexftp/kio_obexftp.cpp
+index 5ae5920..a8c27e7 100644
+--- a/src/kio/obexftp/kio_obexftp.cpp
++++ b/src/kio/obexftp/kio_obexftp.cpp
+@@ -83,7 +83,7 @@ void KioFtp::launchProgressBar()
+ 
+ void KioFtp::connectToHost()
+ {
+-    QDBusPendingReply<QString> reply = m_kded->session(m_host);
++    QDBusPendingReply<QString> reply = m_kded->session(m_host, "ftp");
+     reply.waitForFinished();
+ 
+     const QString &sessionPath = reply.value();
+@@ -225,6 +225,7 @@ void KioFtp::setHost(const QString &host, quint16 port, const QString &user, con
+     Q_UNUSED(pass)
+ 
+     m_host = host;
++    m_host = m_host.replace(QLatin1Char('-'), QLatin1Char(':')).toUpper();
+ 
+     infoMessage(i18n("Connecting to the device"));
+ 
+-- 
+2.1.0
+

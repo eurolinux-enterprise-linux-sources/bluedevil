@@ -4,8 +4,6 @@ set(wizard_SRCS
     wizardagent.cpp
 
     pages/discoverpage.cpp
-    pages/servicespage.cpp
-    pages/serviceoption.cpp
     pages/nopairing.cpp
     pages/legacypairing.cpp
     pages/legacypairingdatabase.cpp
@@ -16,8 +14,6 @@ set(wizard_SRCS
 
 kde4_add_ui_files(wizard_SRCS
             pages/discover.ui
-            pages/services.ui
-            pages/serviceOption.ui
             pages/nopairing.ui
             pages/legacypairing.ui
             pages/keyboardpairing.ui
@@ -27,7 +23,7 @@ kde4_add_ui_files(wizard_SRCS
 
 kde4_add_executable(bluedevil-wizard ${wizard_SRCS})
 
-target_link_libraries(bluedevil-wizard bluedevilaction
+target_link_libraries(bluedevil-wizard
                       ${KDE4_KIO_LIBRARY} ${KDE4_KDEUI_LIBS} ${LibBlueDevil_LIBRARIES})
 
 install(TARGETS bluedevil-wizard ${INSTALL_TARGETS_DEFAULT_ARGS})

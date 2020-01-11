@@ -1,0 +1,30 @@
+From 9d732a65008b54b10ea57eb33ae3648cab1fb41d Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Sat, 7 Feb 2015 14:11:53 +0100
+Subject: [PATCH 21/21] daemon: Don't try to infinitely kill monolithic when it
+ fails
+
+Killing monolithic may fail for various reasons (eg. it may not
+be running in the first place). Don't try to kill it again when it
+fails.
+
+BUG: 343682
+---
+ src/daemon/kded/BlueDevilDaemon.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/daemon/kded/BlueDevilDaemon.cpp b/src/daemon/kded/BlueDevilDaemon.cpp
+index 12efc73..1a4c250 100644
+--- a/src/daemon/kded/BlueDevilDaemon.cpp
++++ b/src/daemon/kded/BlueDevilDaemon.cpp
+@@ -375,7 +375,6 @@ void BlueDevilDaemon::monolithicQuit(QDBusPendingCallWatcher* watcher)
+     QDBusPendingReply<void> reply = *watcher;
+     if (reply.isError()) {
+         qDebug() << "Error response: " << reply.error().message();
+-        killMonolithic();
+     }
+ }
+ 
+-- 
+2.1.0
+

@@ -30,6 +30,7 @@
 
 #include <kio/slavebase.h>
 
+class OrgBluezObexFileTransfer1Interface;
 class KioFtp
     : public QObject
     , public KIO::SlaveBase
@@ -40,8 +41,6 @@ public:
     KioFtp(const QByteArray &pool, const QByteArray &app);
     virtual ~KioFtp();
 
-    int processXmlEntries(const KUrl& url, const QString& xml, const char* slot);
-
     virtual void copy(const KUrl &src, const KUrl &dest, int permissions, KIO::JobFlags flags);
     virtual void listDir(const KUrl &url);
     virtual void setHost(const QString &host, quint16 port, const QString &user, const QString &pass);
@@ -51,34 +50,37 @@ public:
     virtual void rename(const KUrl& src, const KUrl& dest, KIO::JobFlags flags);
     virtual void get(const KUrl& url);
 
+    bool cancelTransfer(const QString &transfer);
+
 private Q_SLOTS:
-    void TransferProgress(qulonglong transfered);
-    void TransferCompleted();
-    void TransferCancelled();
-    void ErrorOccurred(const QString&, const QString&);
-
-    void listDirCallback(const KIO::UDSEntry& entry, const KUrl& url);
-    void statCallback(const KIO::UDSEntry &entry, const KUrl& url);
-
     void updateProcess();
-    void sessionConnected(QString address);
-    void sessionClosed(QString address);
 
-    void wasKilledCheck();
 private:
     void copyHelper(const KUrl &src, const KUrl &dest);
+    void copyWithinObexftp(const KUrl &src, const KUrl &dest);
+    void copyFromObexftp(const KUrl &src, const KUrl &dest);
+    void copyToObexftp(const KUrl &src, const KUrl &dest);
     void statHelper(const KUrl &url);
+
+    QList<KIO::UDSEntry> listFolder(const KUrl &url, bool *ok);
+    bool changeFolder(const QString &folder);
+    bool createFolder(const QString &folder);
+    bool copyFile(const QString &src, const QString &dest);
+    bool deleteFile(const QString &file);
+
+    void updateRootEntryIcon(KIO::UDSEntry &entry, const QString &memoryType);
     void launchProgressBar();
-    void blockUntilNotBusy(QString address);
+    void connectToHost();
+    bool testConnection();
 
 private:
-    int                          m_counter;
-    bool                         m_settingHost;
-    QEventLoop                   m_eventLoop;
+    int m_counter;
     QMap<QString, KIO::UDSEntry> m_statMap;
-    QString                      m_address;
-    QTimer                      *m_timer;
-    org::kde::ObexFtp           *m_kded;
+    QString m_host;
+    QString m_sessionPath;
+    QTimer *m_timer;
+    org::kde::ObexFtp *m_kded;
+    OrgBluezObexFileTransfer1Interface *m_transfer;
 };
 
 #endif // KIO_OBEXFTP_H

@@ -1,0 +1,152 @@
+From 2d29f4ebc6f9a9c0d5d5807c662e64df56c8c711 Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Mon, 29 Dec 2014 13:59:32 +0100
+Subject: [PATCH 05/20] kio_obexftp: Prefer "pcsuite" target for S60 devices
+
+BUG: 342259
+---
+ src/kio/obexftp/kio_obexftp.cpp | 61 ++++++++++++++++++++++++++++++-----------
+ src/kio/obexftp/kio_obexftp.h   |  4 +++
+ 2 files changed, 49 insertions(+), 16 deletions(-)
+
+diff --git a/src/kio/obexftp/kio_obexftp.cpp b/src/kio/obexftp/kio_obexftp.cpp
+index a8c27e7..0783662 100644
+--- a/src/kio/obexftp/kio_obexftp.cpp
++++ b/src/kio/obexftp/kio_obexftp.cpp
+@@ -35,6 +35,8 @@
+ 
+ #include <unistd.h>
+ 
++Q_DECLARE_METATYPE(DeviceInfo)
++
+ extern "C" int KDE_EXPORT kdemain(int argc, char **argv)
+ {
+     KAboutData about("kioobexftp", "bluedevil", ki18n("kioobexftp"), bluedevil_version);
+@@ -64,6 +66,7 @@ KioFtp::KioFtp(const QByteArray &pool, const QByteArray &app)
+     m_timer = new QTimer();
+     m_timer->setInterval(100);
+ 
++    qDBusRegisterMetaType<DeviceInfo>();
+     qDBusRegisterMetaType<QVariantMapList>();
+     m_kded = new org::kde::ObexFtp("org.kde.kded", "/modules/obexftpdaemon", QDBusConnection::sessionBus(), 0);
+ }
+@@ -83,7 +86,36 @@ void KioFtp::launchProgressBar()
+ 
+ void KioFtp::connectToHost()
+ {
+-    QDBusPendingReply<QString> reply = m_kded->session(m_host, "ftp");
++    // Prefer pcsuite target on S60 devices
++    if (m_uuids.contains(QLatin1String("00005005-0000-1000-8000-0002EE000001"))) {
++        if (createSession("pcsuite")) {
++            return;
++        }
++        // Fallback to ftp
++    }
++
++    createSession("ftp");
++}
++
++bool KioFtp::testConnection()
++{
++    if (!m_kded->isOnline().value()) {
++        error(KIO::ERR_SLAVE_DEFINED, i18n("Obexd service is not running."));
++        return false;
++    }
++
++    connectToHost();
++
++    if (!m_transfer) {
++        error(KIO::ERR_COULD_NOT_CONNECT, m_host);
++        return false;
++    }
++    return true;
++}
++
++bool KioFtp::createSession(const QString &target)
++{
++    QDBusPendingReply<QString> reply = m_kded->session(m_host, target);
+     reply.waitForFinished();
+ 
+     const QString &sessionPath = reply.value();
+@@ -95,7 +127,7 @@ void KioFtp::connectToHost()
+         delete m_transfer;
+         m_transfer = 0;
+         m_sessionPath.clear();
+-        return;
++        return false;
+     }
+ 
+     if (m_sessionPath != sessionPath) {
+@@ -104,24 +136,11 @@ void KioFtp::connectToHost()
+         m_transfer = new org::bluez::obex::FileTransfer1("org.bluez.obex", sessionPath, QDBusConnection::sessionBus());
+         m_sessionPath = sessionPath;
+     }
+-}
+ 
+-bool KioFtp::testConnection()
+-{
+-    if (!m_kded->isOnline().value()) {
+-        error(KIO::ERR_SLAVE_DEFINED, i18n("Obexd service is not running."));
+-        return false;
+-    }
+-
+-    connectToHost();
+-
+-    if (!m_transfer) {
+-        error(KIO::ERR_COULD_NOT_CONNECT, m_host);
+-        return false;
+-    }
+     return true;
+ }
+ 
++
+ void KioFtp::updateProcess()
+ {
+     if (m_counter == 49) {
+@@ -227,6 +246,16 @@ void KioFtp::setHost(const QString &host, quint16 port, const QString &user, con
+     m_host = host;
+     m_host = m_host.replace(QLatin1Char('-'), QLatin1Char(':')).toUpper();
+ 
++    QDBusMessage call = QDBusMessage::createMethodCall("org.kde.kded",
++                            "/modules/bluedevil",
++                            "org.kde.BlueDevil",
++                            "device");
++    call << m_host;
++    QDBusReply<DeviceInfo> reply = QDBusConnection::sessionBus().call(call);
++    DeviceInfo info = reply.value();
++
++    m_uuids = info["UUIDs"];
++
+     infoMessage(i18n("Connecting to the device"));
+ 
+     connectToHost();
+diff --git a/src/kio/obexftp/kio_obexftp.h b/src/kio/obexftp/kio_obexftp.h
+index 6f22525..6fe0e56 100644
+--- a/src/kio/obexftp/kio_obexftp.h
++++ b/src/kio/obexftp/kio_obexftp.h
+@@ -30,6 +30,8 @@
+ 
+ #include <kio/slavebase.h>
+ 
++typedef QMap<QString, QString> DeviceInfo;
++
+ class OrgBluezObexFileTransfer1Interface;
+ class KioFtp
+     : public QObject
+@@ -72,11 +74,13 @@ private:
+     void launchProgressBar();
+     void connectToHost();
+     bool testConnection();
++    bool createSession(const QString &target);
+ 
+ private:
+     int m_counter;
+     QMap<QString, KIO::UDSEntry> m_statMap;
+     QString m_host;
++    QString m_uuids;
+     QString m_sessionPath;
+     QTimer *m_timer;
+     org::kde::ObexFtp *m_kded;
+-- 
+2.1.0
+

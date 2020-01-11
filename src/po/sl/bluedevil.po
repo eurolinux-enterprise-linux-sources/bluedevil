@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Jure Repinc <jlp@holodeck1.com>, 2010.
-# Andrej Mernik <andrejm@ubuntu.si>, 2012.
+# Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://bugs.kde.org\n"
-"POT-Creation-Date: 2012-08-19 02:45+0200\n"
-"PO-Revision-Date: 2012-05-11 08:11+0200\n"
+"POT-Creation-Date: 2014-12-21 01:50+0000\n"
+"PO-Revision-Date: 2014-10-29 20:56+0100\n"
 "Last-Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,174 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Jure Repinc,Andrej Žnidaršič,Miha Gašperšič"
+msgstr "Jure Repinc,Andrej Žnidaršič,Miha Gašperšič,Andrej Mernik"
 
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "jlp@holodeck1.com,andrej.znidarsic@gmail.com,mihec.gaspersic@gmail.com"
-
-#: actionplugins/audio/audio.cpp:53
-#, kde-format
-msgid "%1: audio service connection timeout"
-msgstr "%1: potek časa za povezavo z zvočno storitvijo"
-
-#: actionplugins/audio/audio.cpp:66
-#, kde-format
-msgid "%1: audio service connected and configured"
-msgstr "%1: zvočna storitev je povezana in nastavljena"
-
-#: actionplugins/audio/helper/main.cpp:28
-msgid "Bluetooth Audio Helper"
-msgstr "Pomočnik za zvok Bluetooth"
-
-#: actionplugins/audio/helper/main.cpp:29
-#: actionplugins/input/helper/main.cpp:29
-#: actionplugins/networkdun/helper/main.cpp:29
-#: actionplugins/networkpanu/helper/main.cpp:29
-#: actionplugins/sendfile/helper/main.cpp:35
-#: daemon/helpers/filereceiver/main.cpp:32 daemon/kded/BlueDevilDaemon.cpp:86
-#: daemon/obexftpkded/ObexFtpDaemon.cpp:78 monolithic/main.cpp:27
-#: wizard/main.cpp:29
-msgid "(c) 2010, UFO Coders"
-msgstr "© 2010, UFO Coders"
-
-#: actionplugins/audio/helper/main.cpp:31
-#: actionplugins/input/helper/main.cpp:31
-#: actionplugins/networkdun/helper/main.cpp:31
-#: actionplugins/networkpanu/helper/main.cpp:31
-#: actionplugins/sendfile/helper/main.cpp:37
-#: daemon/helpers/filereceiver/main.cpp:34 daemon/kded/BlueDevilDaemon.cpp:89
-#: daemon/obexftpkded/ObexFtpDaemon.cpp:81 monolithic/main.cpp:29
-#: wizard/main.cpp:31
-msgid "Alejandro Fiestas Olivares"
-msgstr "Alejandro Fiestas Olivares"
-
-#: actionplugins/audio/helper/main.cpp:31
-#: actionplugins/input/helper/main.cpp:31
-#: actionplugins/networkdun/helper/main.cpp:31
-#: actionplugins/networkpanu/helper/main.cpp:31
-#: actionplugins/sendfile/helper/main.cpp:37
-#: daemon/helpers/filereceiver/main.cpp:34
-#: daemon/helpers/filereceiver/main.cpp:36 monolithic/main.cpp:29
-#: monolithic/main.cpp:30 wizard/main.cpp:31
-msgid "Developer"
-msgstr "Razvijalec"
-
-#: actionplugins/audio/helper/main.cpp:37
-#: actionplugins/input/helper/main.cpp:37
-#: actionplugins/networkdun/helper/main.cpp:37
-#: actionplugins/networkpanu/helper/main.cpp:37
-msgid "Device to connect"
-msgstr "Naprava za povezavo"
-
-#: actionplugins/input/helper/main.cpp:28
-msgid "Bluetooth Input Helper"
-msgstr "Pomočnik za vhod Bluetooth"
-
-#: actionplugins/input/input.cpp:54
-#, kde-format
-msgid "%1: input service connection timeout"
-msgstr "%1: potek časa za povezavo z vhodno storitvijo"
-
-#: actionplugins/input/input.cpp:67
-#, kde-format
-msgid "%1: input service connected and configured"
-msgstr "%1: vhodna storitev je povezana in nastavljena"
-
-#: actionplugins/networkdun/helper/main.cpp:28
-msgid "Bluetooth Network Helper"
-msgstr "Omrežni pomočnik Bluetooth"
-
-#: actionplugins/networkdun/networkdun.cpp:53
-#: actionplugins/networkpanu/networkpanu.cpp:53
-#, kde-format
-msgid "%1: Setting up..."
-msgstr "%1: Nastavljanje ..."
-
-#: actionplugins/networkpanu/helper/main.cpp:28
-msgid "Bluetooth Network PANU Helper"
-msgstr "Pomočnik PANU za omrežje Bluetooth"
-
-#: actionplugins/sendfile/helper/main.cpp:34
-msgid "Bluetooth Send File Helper"
-msgstr "Pomočnik za pošiljanje datotek prek Bluetooth"
-
-#: actionplugins/sendfile/helper/main.cpp:44
-#: actionplugins/sendfile/helper/main.cpp:45
-msgid "Device UUID where the files will be sent"
-msgstr "UUID naprave, kamor bodo bile datoteke poslane"
-
-#: actionplugins/sendfile/helper/main.cpp:46
-msgid "Files that will be sent"
-msgstr "Datoteke, ki bodo poslane"
-
-#. i18n: ectx: property (text), widget (QLabel, connLabel)
-#. i18n: ectx: property (text), widget (QLabel, connecting)
-#: actionplugins/sendfile/helper/pages/connecting.ui:17
-#: wizard/pages/nopairing.ui:51
-#, no-c-format, kde-format
-msgid "Connecting to: %1"
-msgstr "Povezovanje z: %1"
-
-#: actionplugins/sendfile/helper/pages/connectingpage.cpp:41
-#, kde-format
-msgctxt "Connecting to a Bluetooth device"
-msgid "Connecting to %1..."
-msgstr "Povezovanje z %1 ..."
-
-#. i18n: ectx: property (text), widget (QLabel, selectLbl)
-#: actionplugins/sendfile/helper/pages/selectdeviceandfilespage.cpp:87
-#: actionplugins/sendfile/helper/pages/selectfilediscover.ui:112
-msgid "Select one or more files:"
-msgstr "Izberite eno ali več datotek:"
-
-#: actionplugins/sendfile/helper/pages/selectdeviceandfilespage.cpp:89
-#, kde-format
-msgid "Selected files: <b>%1</b>"
-msgstr "Izbrane datoteke: <b>%1</b>"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: actionplugins/sendfile/helper/pages/selectfilediscover.ui:29
-msgid "Select a device from the list:"
-msgstr "Izberite napravo s seznama:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: actionplugins/sendfile/helper/pages/selectfilediscover.ui:92
-msgid "Scanning"
-msgstr "Preiskovanje"
-
-#: actionplugins/sendfile/helper/sendfilesjob.cpp:83
-#: actionplugins/sendfile/helper/sendfilesjob.cpp:115
-msgid "Sending file over Bluetooth"
-msgstr "Pošiljanje datoteke preko Bluetooth"
-
-#: actionplugins/sendfile/helper/sendfilesjob.cpp:83
-#: actionplugins/sendfile/helper/sendfilesjob.cpp:115
-#: daemon/helpers/filereceiver/openobex/filetransferjob.cpp:102
-#: daemon/helpers/filereceiver/openobex/filetransferjob.cpp:141
-msgctxt "File transfer origin"
-msgid "From"
-msgstr "Iz"
-
-#: actionplugins/sendfile/helper/sendfilesjob.cpp:83
-#: actionplugins/sendfile/helper/sendfilesjob.cpp:115
-#: daemon/helpers/filereceiver/openobex/filetransferjob.cpp:102
-#: daemon/helpers/filereceiver/openobex/filetransferjob.cpp:141
-msgctxt "File transfer destination"
-msgid "To"
-msgstr "Na"
-
-#: actionplugins/sendfile/helper/sendfilewizard.cpp:60
-msgid "Bluetooth Send Files"
-msgstr "Pošiljanje datotek prek Bluetooth"
-
-#: actionplugins/sendfile/helper/sendfilewizard.cpp:64
-msgid "Send Files"
-msgstr "Pošlji datoteke"
+msgstr ""
+"jlp@holodeck1.com,andrej.znidarsic@gmail.com,mihec.gaspersic@gmail.com,"
+"andrejm@ubuntu.si"
 
 #: daemon/helpers/authorize/authorize.cpp:43
 #, kde-format
@@ -211,8 +54,8 @@ msgstr "Zavrni"
 
 #: daemon/helpers/authorize/main.cpp:32
 #: daemon/helpers/confirmmodechange/main.cpp:31
-#: daemon/helpers/requestconfirmation/main.cpp:31
-#: daemon/helpers/requestpin/main.cpp:31
+#: daemon/helpers/requestconfirmation/main.cpp:30
+#: daemon/helpers/requestpin/main.cpp:30
 msgid "KDE Bluetooth System"
 msgstr "KDE-jev sistem za Bluetooth"
 
@@ -234,46 +77,6 @@ msgctxt "Deny the bluetooth mdoe change, shown in a notification"
 msgid "Deny"
 msgstr "Ne spremeni"
 
-#: daemon/helpers/filereceiver/main.cpp:31
-msgid "Bluetooth File Receiver Helper"
-msgstr "Pomočnik za prejemanje datotek prek Bluetooth"
-
-#: daemon/helpers/filereceiver/main.cpp:36 daemon/kded/BlueDevilDaemon.cpp:92
-msgid "Eduardo Robles Elvira"
-msgstr "Eduardo Robles Elvira"
-
-#: daemon/helpers/filereceiver/openobex/filetransferjob.cpp:102
-#: daemon/helpers/filereceiver/openobex/filetransferjob.cpp:141
-msgid "Receiving file over Bluetooth"
-msgstr "Prejemanje datoteke preko Bluetooth"
-
-#: daemon/helpers/filereceiver/openobex/serversession.cpp:133
-#, kde-format
-msgctxt ""
-"Show a notification asking to authorize or deny an incoming file transfer to "
-"this computer from a Bluetooth device."
-msgid "%1 is sending you the file %2"
-msgstr "%1 vam pošilja datoteko %2"
-
-#: daemon/helpers/filereceiver/openobex/serversession.cpp:136
-msgctxt "Deny the incoming file transfer"
-msgid "Cancel"
-msgstr "Zavrni"
-
-#: daemon/helpers/filereceiver/openobex/serversession.cpp:137
-msgctxt ""
-"Button to accept the incoming file transfer and download it in the default "
-"download directory"
-msgid "Accept"
-msgstr "Sprejmi"
-
-#: daemon/helpers/filereceiver/openobex/serversession.cpp:138
-msgctxt ""
-"Button to accept the incoming file transfer and show a Save as... dialog "
-"that will let the user choose where will the file be downloaded to"
-msgid "Save as..."
-msgstr "Shrani kot …"
-
 #: daemon/helpers/requestconfirmation/requestconfirmation.cpp:39
 #, kde-format
 msgctxt ""
@@ -293,11 +96,16 @@ msgid "PIN incorrect"
 msgstr "Napačen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: daemon/helpers/requestpin/dialogWidget.ui:39
+#: daemon/helpers/requestpin/dialogWidget.ui:52
 msgid "PIN:"
 msgstr "PIN:"
 
-#: daemon/helpers/requestpin/requestpin.cpp:45
+#. i18n: ectx: property (placeholderText), widget (KLineEdit, pin)
+#: daemon/helpers/requestpin/dialogWidget.ui:71
+msgid "1234"
+msgstr "1234"
+
+#: daemon/helpers/requestpin/requestpin.cpp:48
 #, kde-format
 msgctxt ""
 "Shown in a notification to announce that a PIN is needed to accomplish a "
@@ -305,14 +113,14 @@ msgctxt ""
 msgid "PIN needed to pair with %1"
 msgstr "Za povezovanje z %1 je potreben PIN"
 
-#: daemon/helpers/requestpin/requestpin.cpp:51
+#: daemon/helpers/requestpin/requestpin.cpp:54
 msgctxt ""
 "Notification button which once clicked, a dialog to introduce the PIN will "
 "be shown"
 msgid "Introduce PIN"
 msgstr "Vnos PIN-a"
 
-#: daemon/helpers/requestpin/requestpin.cpp:78
+#: daemon/helpers/requestpin/requestpin.cpp:87
 #, kde-format
 msgctxt ""
 "Shown in a dialog which asks to introduce a PIN that will be used to pair a "
@@ -324,35 +132,88 @@ msgstr ""
 "Če se želite povezati z računalnikom %1, morate vnesti PIN. Vnesite ga "
 "spodaj."
 
-#: daemon/helpers/requestpin/requestpin.cpp:88
+#: daemon/helpers/requestpin/requestpin.cpp:96
 msgctxt "Shown in the caption of a dialog where the user introduce the PIN"
 msgid "Introduce PIN"
 msgstr "Vnos PIN-a"
 
-#: daemon/kded/BlueDevilDaemon.cpp:82 daemon/kded/BlueDevilDaemon.cpp:84
+#: daemon/kded/BlueDevilDaemon.cpp:90 daemon/kded/BlueDevilDaemon.cpp:92
 msgid "Bluetooth Daemon"
-msgstr "Odzadnji program za Bluetooth"
+msgstr "Ozadnji program za Bluetooth"
 
-#: daemon/kded/BlueDevilDaemon.cpp:89 daemon/kded/BlueDevilDaemon.cpp:92
-#: daemon/obexftpkded/ObexFtpDaemon.cpp:81
+#: daemon/kded/BlueDevilDaemon.cpp:94 kio/obexftp/daemon/ObexFtpDaemon.cpp:64
+#: monolithic/main.cpp:29 sendfile/main.cpp:33 wizard/main.cpp:31
+msgid "(c) 2010, UFO Coders"
+msgstr "© 2010, UFO Coders"
+
+#: daemon/kded/BlueDevilDaemon.cpp:97 kio/obexftp/daemon/ObexFtpDaemon.cpp:67
+#: monolithic/main.cpp:31 sendfile/main.cpp:35 wizard/main.cpp:33
+msgid "Alejandro Fiestas Olivares"
+msgstr "Alejandro Fiestas Olivares"
+
+#: daemon/kded/BlueDevilDaemon.cpp:97 daemon/kded/BlueDevilDaemon.cpp:100
+#: kio/obexftp/daemon/ObexFtpDaemon.cpp:67 monolithic/main.cpp:31
+#: sendfile/main.cpp:35 wizard/main.cpp:33
 msgid "Maintainer"
 msgstr "Vzdrževalec"
 
-#: daemon/obexftpkded/ObexFtpDaemon.cpp:74
-#: daemon/obexftpkded/ObexFtpDaemon.cpp:76
-msgid "ObexFtp Daemon"
-msgstr "Odzadnji program obexftp"
+#: daemon/kded/BlueDevilDaemon.cpp:100
+msgid "Eduardo Robles Elvira"
+msgstr "Eduardo Robles Elvira"
 
-#: fileitemactionplugin/sendfileitemaction.cpp:61
+#: daemon/kded/bluezagent.cpp:194
+msgctxt ""
+"User will see this as: Bluetooth device is asking if the pin is "
+"correct        It is mostly a fallback"
+msgid "Bluetooth device"
+msgstr "Naprava Bluetooth"
+
+#: daemon/kded/filereceiver/receivefilejob.cpp:119
+#, kde-format
+msgctxt ""
+"Show a notification asking to authorize or deny an incoming file transfer to "
+"this computer from a Bluetooth device."
+msgid "%1 is sending you the file %2"
+msgstr "%1 vam pošilja datoteko %2"
+
+#: daemon/kded/filereceiver/receivefilejob.cpp:123
+msgctxt ""
+"Button to accept the incoming file transfer and download it in the default "
+"download directory"
+msgid "Accept"
+msgstr "Sprejmi"
+
+#: daemon/kded/filereceiver/receivefilejob.cpp:124
+msgctxt "Deny the incoming file transfer"
+msgid "Cancel"
+msgstr "Zavrni"
+
+#: daemon/kded/filereceiver/receivefilejob.cpp:196
+msgid "Receiving file over Bluetooth"
+msgstr "Prejemanje datoteke preko Bluetooth"
+
+#: daemon/kded/filereceiver/receivefilejob.cpp:197
+#: sendfile/sendfilesjob.cpp:74 sendfile/sendfilesjob.cpp:177
+msgctxt "File transfer origin"
+msgid "From"
+msgstr "Iz"
+
+#: daemon/kded/filereceiver/receivefilejob.cpp:199
+#: sendfile/sendfilesjob.cpp:74 sendfile/sendfilesjob.cpp:177
+msgctxt "File transfer destination"
+msgid "To"
+msgstr "Na"
+
+#: fileitemactionplugin/sendfileitemaction.cpp:66
 msgid "Send via Bluetooth"
 msgstr "Pošlji prek povezave Bluetooth"
 
-#: fileitemactionplugin/sendfileitemaction.cpp:80
+#: fileitemactionplugin/sendfileitemaction.cpp:82
 msgctxt "Find Bluetooth device"
 msgid "Find Device..."
 msgstr "Najdi napravo ..."
 
-#: fileitemactionplugin/sendfileitemaction.cpp:83
+#: fileitemactionplugin/sendfileitemaction.cpp:85
 msgctxt "Other Bluetooth device"
 msgid "Other..."
 msgstr "Drugo ..."
@@ -429,18 +290,18 @@ msgstr "Vmesniki Bluetooth"
 msgid "Bluetooth Adapters Control Panel Module"
 msgstr "Modul za vmesnike Bluetooth za Sistemske nastavitve"
 
-#: kcmodule/bluedeviladapters.cpp:243 kcmodule/bluedevildevices.cpp:327
-#: kcmodule/bluedeviltransfer.cpp:54
+#: kcmodule/bluedeviladapters.cpp:243 kcmodule/bluedevildevices.cpp:332
+#: kcmodule/bluedeviltransfer.cpp:52
 msgid "(c) 2010 Rafael Fernández López"
 msgstr "© 2010 Rafael Fernández López"
 
-#: kcmodule/bluedeviladapters.cpp:245 kcmodule/bluedevildevices.cpp:329
-#: kcmodule/bluedeviltransfer.cpp:56 monolithic/main.cpp:30
+#: kcmodule/bluedeviladapters.cpp:245 kcmodule/bluedevildevices.cpp:334
+#: kcmodule/bluedeviltransfer.cpp:54 monolithic/main.cpp:32
 msgid "Rafael Fernández López"
 msgstr "Rafael Fernández López"
 
-#: kcmodule/bluedeviladapters.cpp:245 kcmodule/bluedevildevices.cpp:329
-#: kcmodule/bluedeviltransfer.cpp:56
+#: kcmodule/bluedeviladapters.cpp:245 kcmodule/bluedevildevices.cpp:334
+#: kcmodule/bluedeviltransfer.cpp:54
 msgid "Developer and Maintainer"
 msgstr "Razvijalec in vzdrževalec"
 
@@ -448,42 +309,50 @@ msgstr "Razvijalec in vzdrževalec"
 msgid "No adapters found. Please connect one."
 msgstr "Najdenega ni bilo nobenega vmesnika. Priključite ga."
 
-#: kcmodule/bluedevildevices.cpp:320
+#: kcmodule/bluedevildevices.cpp:325
 msgid "Enable KDE Bluetooth Integration"
 msgstr "Omogoči podporo KDE Bluetooth"
 
-#: kcmodule/bluedevildevices.cpp:325
+#: kcmodule/bluedevildevices.cpp:330
 msgid "Bluetooth Devices"
 msgstr "Naprave Bluetooth"
 
-#: kcmodule/bluedevildevices.cpp:326
+#: kcmodule/bluedevildevices.cpp:331
 msgid "Bluetooth Devices Control Panel Module"
 msgstr "Modul za naprave Bluetooth za Sistemske nastavitve"
 
-#: kcmodule/bluedevildevices.cpp:361
+#: kcmodule/bluedevildevices.cpp:366
 msgctxt "Details of the device"
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: kcmodule/bluedevildevices.cpp:363
+#: kcmodule/bluedevildevices.cpp:368
 msgctxt "Remove a device from the list of known devices"
 msgid "Remove"
 msgstr "Odstrani"
 
-#: kcmodule/bluedevildevices.cpp:365
+#: kcmodule/bluedevildevices.cpp:370 kcmodule/bluedevildevices.cpp:453
+msgid "Connect"
+msgstr "Poveži"
+
+#: kcmodule/bluedevildevices.cpp:372
 msgid "Disconnect"
 msgstr "Prekini povezavo"
 
-#: kcmodule/bluedevildevices.cpp:367
+#: kcmodule/bluedevildevices.cpp:374
 msgid "Add Device..."
 msgstr "Dodaj napravo ..."
 
-#: kcmodule/bluedevildevices.cpp:466
+#: kcmodule/bluedevildevices.cpp:451
+msgid "Re-connect"
+msgstr "Znova poveži"
+
+#: kcmodule/bluedevildevices.cpp:488
 #, kde-format
 msgid "Pick a new alias for %1"
 msgstr "Izberite nov vzdevek za %1"
 
-#: kcmodule/bluedevildevices.cpp:490
+#: kcmodule/bluedevildevices.cpp:512
 #, kde-format
 msgid ""
 "Are you sure that you want to remove device \"%1\" from the list of known "
@@ -492,137 +361,117 @@ msgstr ""
 "Ali ste prepričani, da želite odstraniti napravo \"%1\" iz seznama znanih "
 "naprav?"
 
-#: kcmodule/bluedevildevices.cpp:491
+#: kcmodule/bluedevildevices.cpp:513
 msgctxt "Title of window that asks for confirmation when removing a device"
 msgid "Device removal"
 msgstr "Odstranjevanje naprave"
 
-#: kcmodule/bluedevildevices.cpp:555
+#: kcmodule/bluedevildevices.cpp:586
 msgid "No remote devices have been added"
 msgstr "Ni dodanih oddaljenih naprav"
 
-#: kcmodule/bluedevildevices.cpp:557
+#: kcmodule/bluedevildevices.cpp:588
 msgid "Click here to add a remote device"
 msgstr "Za dodajanje oddaljene naprave kliknite tukaj"
 
-#: kcmodule/bluedevildevices.cpp:596 kcmodule/bluedevildevices.cpp:638
+#: kcmodule/bluedevildevices.cpp:628 kcmodule/bluedevildevices.cpp:670
 msgctxt "Type of device: could not be determined"
 msgid "Unknown"
 msgstr "Neznana"
 
-#: kcmodule/bluedevildevices.cpp:599
+#: kcmodule/bluedevildevices.cpp:631
 msgctxt "This device is a Phone"
 msgid "Phone"
 msgstr "Telefon"
 
-#: kcmodule/bluedevildevices.cpp:602
+#: kcmodule/bluedevildevices.cpp:634
 msgctxt "This device is a Modem"
 msgid "Modem"
 msgstr "Modem"
 
-#: kcmodule/bluedevildevices.cpp:605
+#: kcmodule/bluedevildevices.cpp:637
 msgctxt "This device is a Computer"
 msgid "Computer"
 msgstr "Računalnik"
 
-#: kcmodule/bluedevildevices.cpp:608
+#: kcmodule/bluedevildevices.cpp:640
 msgctxt "This device is of type Network"
 msgid "Network"
 msgstr "Omrežje"
 
-#: kcmodule/bluedevildevices.cpp:611
+#: kcmodule/bluedevildevices.cpp:643
 msgctxt "This device is a Headset"
 msgid "Headset"
 msgstr "Slušalke z mikrofonom"
 
-#: kcmodule/bluedevildevices.cpp:614
+#: kcmodule/bluedevildevices.cpp:646
 msgctxt "This device are Headphones"
 msgid "Headphones"
 msgstr "Slušalke"
 
-#: kcmodule/bluedevildevices.cpp:617
+#: kcmodule/bluedevildevices.cpp:649
 msgctxt "This device is of type Audio"
 msgid "Audio"
 msgstr "Zvok"
 
-#: kcmodule/bluedevildevices.cpp:620
+#: kcmodule/bluedevildevices.cpp:652
 msgctxt "This device is a Keyboard"
 msgid "Keyboard"
 msgstr "Tipkovnica"
 
-#: kcmodule/bluedevildevices.cpp:623
+#: kcmodule/bluedevildevices.cpp:655
 msgctxt "This device is a Mouse"
 msgid "Mouse"
 msgstr "Miška"
 
-#: kcmodule/bluedevildevices.cpp:626
+#: kcmodule/bluedevildevices.cpp:658
 msgctxt "This device is a Camera"
 msgid "Camera"
 msgstr "Kamera"
 
-#: kcmodule/bluedevildevices.cpp:629
+#: kcmodule/bluedevildevices.cpp:661
 msgctxt "This device is a Printer"
 msgid "Printer"
 msgstr "Tiskalnik"
 
-#: kcmodule/bluedevildevices.cpp:632
+#: kcmodule/bluedevildevices.cpp:664
 msgctxt "This device is a Joypad"
 msgid "Joypad"
 msgstr "Igralna palica"
 
-#: kcmodule/bluedevildevices.cpp:635
+#: kcmodule/bluedevildevices.cpp:667
 msgctxt "This device is a Tablet"
 msgid "Tablet"
 msgstr "Tablica"
 
-#: kcmodule/bluedevildevices.cpp:641
+#: kcmodule/bluedevildevices.cpp:673
 #, kde-format
 msgctxt "Type of remote device (e.g. Camera, Mouse, Headset...)"
 msgid "Type: %1"
 msgstr "Vrsta: %1"
 
-#: kcmodule/bluedeviltransfer.cpp:52
+#: kcmodule/bluedeviltransfer.cpp:50
 msgid "Bluetooth Transfer"
 msgstr "Prenos prek Bluetooth"
 
-#: kcmodule/bluedeviltransfer.cpp:53
+#: kcmodule/bluedeviltransfer.cpp:51
 msgid "Bluetooth Transfer Control Panel Module"
 msgstr "Modul za prenos prek Bluetooth za Sistemske nastavitve"
 
-#: kcmodule/bluedeviltransfer.cpp:74
+#: kcmodule/bluedeviltransfer.cpp:72
 msgctxt "'Auto accept' option value"
 msgid "Never"
 msgstr "Nikoli"
 
-#: kcmodule/bluedeviltransfer.cpp:75
+#: kcmodule/bluedeviltransfer.cpp:73
 msgctxt "'Auto accept' option value"
 msgid "Trusted devices"
 msgstr "Zaupanja vredne naprave"
 
-#: kcmodule/bluedeviltransfer.cpp:76
+#: kcmodule/bluedeviltransfer.cpp:74
 msgctxt "'Auto accept' option value"
 msgid "All devices"
 msgstr "Vse naprave"
-
-#: kcmodule/bluedeviltransfer.cpp:78
-msgctxt "'Require PIN' option value"
-msgid "Never"
-msgstr "Nikoli"
-
-#: kcmodule/bluedeviltransfer.cpp:79
-msgctxt "'Require PIN' option value"
-msgid "Always"
-msgstr "Vedno"
-
-#: kcmodule/bluedeviltransfer.cpp:81
-msgctxt "'Permissions' option value"
-msgid "Read Only"
-msgstr "Samo za branje"
-
-#: kcmodule/bluedeviltransfer.cpp:82
-msgctxt "'Permissions' option value"
-msgid "Modify and Read"
-msgstr "Spreminjanje in branje"
 
 #: kcmodule/devicedetails.cpp:44
 msgctxt "Name of the device"
@@ -654,8 +503,8 @@ msgctxt "Device is trusted"
 msgid "Trusted"
 msgstr "Zaupanja vredna"
 
-#: kcmodule/systemcheck.cpp:156 kio/bluetooth/kiobluetooth.cpp:101
-#: kio/bluetooth/kiobluetooth.cpp:206
+#: kcmodule/systemcheck.cpp:156 kio/bluetooth/kiobluetooth.cpp:81
+#: kio/bluetooth/kiobluetooth.cpp:199
 msgid "No Bluetooth adapters have been found."
 msgstr "Najdenega ni bilo nobenega vmesnika Bluetooth."
 
@@ -698,165 +547,108 @@ msgstr "Samodejno sprejmi:"
 msgid "Receive files:"
 msgstr "Prejmi datoteke:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: kcmodule/transfer.ui:107
-msgid "<b>Sharing</b>"
-msgstr "<b>Souporaba</b>"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: kcmodule/transfer.ui:120
-msgid "Share Files:"
-msgstr "Souporaba datotek:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: kcmodule/transfer.ui:140
-msgid "Require PIN:"
-msgstr "Zahtevaj PIN:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: kcmodule/transfer.ui:153
-msgid "Permissions:"
-msgstr "Dovoljenja:"
-
-#. i18n: ectx: property (text), widget (KPushButton, sharedFiles)
-#: kcmodule/transfer.ui:184
-msgid "Shared Files"
-msgstr "Datoteke v souporabi"
-
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#: kcmodule/transfer.ui:212
-msgid "Shared Folder"
-msgstr "Mapa v souporabi"
-
-#: kio/bluetooth/kiobluetooth.cpp:44
+#: kio/bluetooth/kiobluetooth.cpp:40
 msgid "kiobluetooth"
 msgstr "kiobluetooth"
 
-#: kio/bluetooth/kiobluetooth.cpp:68 monolithic/monolithic.cpp:146
+#: kio/bluetooth/kiobluetooth.cpp:64 monolithic/monolithic.cpp:144
 msgid "Send File"
 msgstr "Pošlji datoteko"
 
-#: kio/bluetooth/kiobluetooth.cpp:73
+#: kio/bluetooth/kiobluetooth.cpp:70
 msgid "Browse Files"
 msgstr "Brskanje po datotekah"
 
-#: kio/bluetooth/kiobluetooth.cpp:78
-msgid "Human Interface Device"
-msgstr "Human Interface Device"
-
-#: kio/bluetooth/kiobluetooth.cpp:83
-msgid "Headset"
-msgstr "Slušalke z mikrofonom"
-
-#: kio/bluetooth/kiobluetooth.cpp:88
-msgid "Dial Up Network"
-msgstr "Omrežje na klic"
-
-#: kio/bluetooth/kiobluetooth.cpp:93
-msgid "Personal Area Network"
-msgstr "Zasebno omrežje"
-
-#: kio/bluetooth/kiobluetooth.cpp:124
+#: kio/bluetooth/kiobluetooth.cpp:99
 msgid "Retrieving services..."
 msgstr "Pridobivanje storitev ..."
 
-#: kio/bluetooth/kiobluetooth.cpp:174
+#: kio/bluetooth/kiobluetooth.cpp:106
+msgid "This address is unavailable."
+msgstr ""
+
+#: kio/bluetooth/kiobluetooth.cpp:163
 msgid "Scanning for new devices..."
 msgstr "Iskanje novih naprav ..."
 
-#: kio/obexftp/kio_obexftp.cpp:39
+#: kio/obexftp/daemon/ObexFtpDaemon.cpp:60
+#: kio/obexftp/daemon/ObexFtpDaemon.cpp:62
+msgid "ObexFtp Daemon"
+msgstr "Ozadnji program obexftp"
+
+#: kio/obexftp/kio_obexftp.cpp:40
 msgid "kioobexftp"
 msgstr "kioobexftp"
 
-#: kio/obexftp/kio_obexftp.cpp:95
+#: kio/obexftp/kio_obexftp.cpp:112
+msgid "Obexd service is not running."
+msgstr ""
+
+#: kio/obexftp/kio_obexftp.cpp:145
 msgid "Retrieving information from remote device..."
 msgstr "Pridobivanje podatkov od oddaljene naprave ..."
 
-#: kio/obexftp/kio_obexftp.cpp:160
+#: kio/obexftp/kio_obexftp.cpp:229
 msgid "Connecting to the device"
 msgstr "Povezovanje z napravo"
 
-#: kio/obexftp/kio_obexftp.cpp:340
-msgid "Can't connect to the device"
-msgstr "Z napravo se ni mogoče povezati"
+#: kio/obexftp/kio_obexftp.cpp:515
+msgid "Phone memory"
+msgstr ""
 
-#: kio/obexftp/kio_obexftp.cpp:342
-msgid "Connection closed"
-msgstr "Povezava je bila prekinjena"
+#: kio/obexftp/kio_obexftp.cpp:518
+msgid "External memory"
+msgstr ""
 
-#: kio/obexftp/kio_obexftp.cpp:440
-msgid "The device is busy, waiting..."
-msgstr "Naprava je zaposlena. Čakanje ..."
-
-#: monolithic/main.cpp:26
+#: monolithic/main.cpp:28
 msgid "Bluetooth"
 msgstr "Bluetooth"
 
-#: monolithic/monolithic.cpp:134
+#: monolithic/main.cpp:32
+msgid "Developer"
+msgstr "Razvijalec"
+
+#: monolithic/monolithic.cpp:42
+msgid "Browse device"
+msgstr "Brskanje po napravi"
+
+#: monolithic/monolithic.cpp:43 sendfile/sendfilewizard.cpp:62
+msgid "Send Files"
+msgstr "Pošlji datoteke"
+
+#: monolithic/monolithic.cpp:132
 msgid "Bluetooth is Off"
 msgstr "Bluetooth je izklopljen"
 
-#: monolithic/monolithic.cpp:140
+#: monolithic/monolithic.cpp:138
 msgid "Turn Bluetooth On"
 msgstr "Vključi Bluetooth"
 
-#: monolithic/monolithic.cpp:150
+#: monolithic/monolithic.cpp:148
 msgid "Browse devices"
 msgstr "Brskanje po napravah"
 
-#: monolithic/monolithic.cpp:160
+#: monolithic/monolithic.cpp:155
 msgid "Known Devices"
 msgstr "Znane naprave"
 
-#: monolithic/monolithic.cpp:201 monolithic/monolithic.cpp:541
-msgid "Browse device..."
-msgstr "Brskanje po napravi ..."
-
-#: monolithic/monolithic.cpp:210 monolithic/monolithic.cpp:549
-msgid "Send files..."
-msgstr "Pošlji datoteke ..."
-
-#: monolithic/monolithic.cpp:228 monolithic/monolithic.cpp:252
-#: monolithic/monolithic.cpp:282 monolithic/monolithic.cpp:509
-#: monolithic/monolithic.cpp:516
-msgctxt "Action"
-msgid "Disconnect"
-msgstr "Prekini povezavo"
-
-#: monolithic/monolithic.cpp:234 monolithic/monolithic.cpp:264
-#: monolithic/monolithic.cpp:294 monolithic/monolithic.cpp:501
-#: monolithic/monolithic.cpp:521 monolithic/monolithic.cpp:557
-#: monolithic/monolithic.cpp:570 monolithic/monolithic.cpp:583
-msgctxt "Action"
-msgid "Connect"
-msgstr "Poveži se"
-
-#: monolithic/monolithic.cpp:258 monolithic/monolithic.cpp:288
-#: monolithic/monolithic.cpp:506
-msgid "Connecting..."
-msgstr "Povezovanje ..."
-
-#: monolithic/monolithic.cpp:303 monolithic/monolithic.cpp:596
-msgid "No supported services found"
-msgstr "Najdene ni bilo nobene podprte storitve"
-
-#: monolithic/monolithic.cpp:318
+#: monolithic/monolithic.cpp:165
 msgid "Add Device"
 msgstr "Dodaj napravo"
 
-#: monolithic/monolithic.cpp:322
+#: monolithic/monolithic.cpp:169
 msgid "Configure Bluetooth"
 msgstr "Nastavi Bluetooth"
 
-#: monolithic/monolithic.cpp:331
+#: monolithic/monolithic.cpp:178
 msgid "Discoverable"
 msgstr "Viden"
 
-#: monolithic/monolithic.cpp:337
+#: monolithic/monolithic.cpp:184
 msgid "Turn Bluetooth Off"
 msgstr "Izklopi Bluetooth"
 
-#: monolithic/monolithic.cpp:361
+#: monolithic/monolithic.cpp:206
 #, kde-format
 msgctxt "Number of Bluetooth connected devices"
 msgid "%1 connected device"
@@ -866,74 +658,127 @@ msgstr[1] "%1 povezana naprava"
 msgstr[2] "%1 povezani napravi"
 msgstr[3] "%1 povezane naprave"
 
-#: monolithic/monolithic.cpp:653
+#: monolithic/monolithic.cpp:367
 msgid "No adapters found"
 msgstr "Najdenega ni bilo nobenega vmesnika"
 
-#: monolithic/monolithic.cpp:680
+#: monolithic/monolithic.cpp:407
 msgctxt "When the bluetooth is enabled and powered"
 msgid "Bluetooth is On"
 msgstr "Bluetooth je vklopljen"
 
-#: monolithic/monolithic.cpp:682
+#: monolithic/monolithic.cpp:409
 msgctxt "When the bluetooth is disabled or not powered"
 msgid "Bluetooth is Off"
 msgstr "Bluetooth je izklopljen"
 
+#: monolithic/monolithic.cpp:460
+msgctxt "Re-connect to a bluetooth device"
+msgid "Re-connect"
+msgstr "Znova poveži"
+
+#: monolithic/monolithic.cpp:461
+msgctxt "Disconnect to a bluetooth device"
+msgid "Disconnect"
+msgstr "Prekini povezavo"
+
+#: monolithic/monolithic.cpp:467
+msgctxt "Connect to a bluetooth device"
+msgid "Connect"
+msgstr "Poveži se"
+
+#: sendfile/main.cpp:32
+msgid "Bluetooth Send File Helper"
+msgstr "Pomočnik za pošiljanje datotek prek Bluetooth"
+
+#: sendfile/main.cpp:42 sendfile/main.cpp:43
+msgid "Device UUID where the files will be sent"
+msgstr "UUID naprave, kamor bodo bile datoteke poslane"
+
+#: sendfile/main.cpp:44
+msgid "Files that will be sent"
+msgstr "Datoteke, ki bodo poslane"
+
+#. i18n: ectx: property (text), widget (QLabel, connLabel)
+#: sendfile/pages/connecting.ui:17
+#, no-c-format, kde-format
+msgid "Connecting to: %1"
+msgstr "Povezovanje z: %1"
+
+#: sendfile/pages/connectingpage.cpp:41
+#, kde-format
+msgctxt "Connecting to a Bluetooth device"
+msgid "Connecting to %1..."
+msgstr "Povezovanje z %1 ..."
+
+#. i18n: ectx: property (text), widget (QLabel, selectLbl)
+#: sendfile/pages/selectdeviceandfilespage.cpp:87
+#: sendfile/pages/selectfilediscover.ui:112
+msgid "Select one or more files:"
+msgstr "Izberite eno ali več datotek:"
+
+#: sendfile/pages/selectdeviceandfilespage.cpp:89
+#, kde-format
+msgid "Selected files: <b>%1</b>"
+msgstr "Izbrane datoteke: <b>%1</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sendfile/pages/selectfilediscover.ui:29
+msgid "Select a device from the list:"
+msgstr "Izberite napravo s seznama:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sendfile/pages/selectfilediscover.ui:92
+msgid "Scanning"
+msgstr "Preiskovanje"
+
+#: sendfile/sendfilesjob.cpp:74 sendfile/sendfilesjob.cpp:177
+msgid "Sending file over Bluetooth"
+msgstr "Pošiljanje datoteke preko Bluetooth"
+
+#: sendfile/sendfilewizard.cpp:60
+msgid "Bluetooth Send Files"
+msgstr "Pošiljanje datotek prek Bluetooth"
+
 #. i18n: ectx: label, entry (enabled), group (General)
-#: settings/filereceiver.kcfg:21
+#: settings/filereceiver.kcfg:13
 msgid "Enable or disable receiving files"
 msgstr "Omogoči ali onemogoči prejemanje datotek"
 
 #. i18n: ectx: label, entry (saveUrl), group (General)
-#: settings/filereceiver.kcfg:25
+#: settings/filereceiver.kcfg:17
 msgid "Save received files to:"
 msgstr "Shrani prejete datoteke v:"
 
 #. i18n: ectx: label, entry (autoAccept), group (General)
-#: settings/filereceiver.kcfg:29
+#: settings/filereceiver.kcfg:21
 msgid "Whether allow to modify shared files"
 msgstr "Vedno dovoli spreminjanje datotek v souporabi"
-
-#. i18n: ectx: label, entry (shareEnabled), group (General)
-#: settings/filereceiver.kcfg:34
-msgid "Enable or disable file sharing"
-msgstr "Omogoči ali onemogoči souporabo datotek"
-
-#. i18n: ectx: label, entry (requirePin), group (General)
-#: settings/filereceiver.kcfg:38
-msgid "Whether require the PIN"
-msgstr "Vedno zahtevaj PIN"
-
-#. i18n: ectx: label, entry (allowWrite), group (General)
-#: settings/filereceiver.kcfg:42
-msgid "Allow external devices to modify the shared files"
-msgstr "Dovoli zunanjim napravam, da urejajo datoteke v souporabi"
 
 #. i18n: ectx: label, entry (enableGlobalBluetooth), group (General)
 #: settings/global.kcfg:10
 msgid "Enable or disable the global KDE Bluetooth integration"
 msgstr "Omogoči ali onemogoči splošno vključitev KDE Bluetooth"
 
-#: wizard/bluewizard.cpp:44
+#: wizard/bluewizard.cpp:41
 msgid "Bluetooth Device Wizard"
 msgstr "Čarovnik za naprave Bluetooth"
 
-#: wizard/bluewizard.cpp:71
+#: wizard/bluewizard.cpp:68
 msgctxt "Action to go to the next page on the wizard"
 msgid "Next"
 msgstr "Naprej"
 
-#: wizard/bluewizard.cpp:72
+#: wizard/bluewizard.cpp:69
 msgctxt "Action to finish the wizard"
 msgid "Finish"
 msgstr "Končaj"
 
-#: wizard/main.cpp:28
+#: wizard/main.cpp:30
 msgid "Bluetooth Wizard"
 msgstr "Čarovnik za Bluetooth"
 
-#: wizard/main.cpp:37
+#: wizard/main.cpp:39
 msgid "Device to pair with"
 msgstr "Naprava za povezavo"
 
@@ -947,17 +792,12 @@ msgstr "Preiskovanje ..."
 msgid "Manual PIN:"
 msgstr "Ročni PIN:"
 
-#. i18n: ectx: property (inputMask), widget (QLineEdit, pinText)
-#: wizard/pages/discover.ui:118
-msgid "999999999; "
-msgstr "999999999; "
-
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, pinText)
-#: wizard/pages/discover.ui:124
+#: wizard/pages/discover.ui:121
 msgid "0000"
 msgstr "0000"
 
-#: wizard/pages/discoverpage.cpp:39
+#: wizard/pages/discoverpage.cpp:40
 msgid "Select a device"
 msgstr "Izberite napravo"
 
@@ -977,9 +817,8 @@ msgctxt "This string is shown when the wizard fail"
 msgid "The setup of the device has failed"
 msgstr "Nastavitev naprave je spodletela"
 
-#. i18n: ectx: property (text), widget (QLabel, failLbl)
-#: wizard/pages/fail.ui:35
-#, no-c-format, kde-format
+#: wizard/pages/fail.cpp:63
+#, kde-format
 msgid "The setup of %1 has failed"
 msgstr "Nastavitev %1 je spodletela"
 
@@ -991,327 +830,30 @@ msgstr ""
 "Vpišite PIN na tipkovnici, ko se pojavi pogovorno okno, in pritisnite Enter"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: wizard/pages/legacypairing.ui:108
+#: wizard/pages/legacypairing.ui:108 wizard/pages/ssppairing.cpp:99
 msgid "Please introduce the PIN in your device when it appears"
 msgstr "Vpišite PIN v svoji napravi, ko se pojavi pogovorno okno"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: wizard/pages/services.ui:19
-msgid "The following compatible services have been found:"
-msgstr "Najdene so bile naslednje združljive storitve:"
-
-#: wizard/pages/servicespage.cpp:32
-msgid "Service Selection"
-msgstr "Izbira storitve"
-
-#: wizard/pages/servicespage.cpp:76
+#: wizard/pages/legacypairingdatabase.cpp:48 wizard/pages/ssppairing.cpp:60
 #, kde-format
-msgid "%1 has been paired successfully"
-msgstr "Povezava z %1 je bila uspešna"
+msgid "Connecting to %1..."
+msgstr "Povezovanje z %1 ..."
 
-#: wizard/pages/servicespage.cpp:87
-msgctxt "Do not initialize any service of the device"
-msgid "None"
-msgstr "Nobene"
+#. i18n: ectx: property (text), widget (QLabel, connecting)
+#: wizard/pages/nopairing.ui:51
+msgid "Connecting to:"
+msgstr "Povezovanje z:"
 
-#: wizard/pages/servicespage.cpp:87
-msgid "Do not initialize any service"
-msgstr "Ne začni nobene storitve"
-
-#: wizard/pages/ssppairing.cpp:81
+#: wizard/pages/ssppairing.cpp:76
 msgid "Matches"
 msgstr "Ujemanja"
 
-#: wizard/pages/ssppairing.cpp:83
+#: wizard/pages/ssppairing.cpp:78
 msgid "Does not match"
 msgstr "Se ne ujema"
 
-#: wizard/pages/ssppairing.cpp:97
+#: wizard/pages/ssppairing.cpp:91
 #, kde-format
 msgid ""
 "Please, confirm that the PIN displayed on \"%1\" matches the wizard one."
 msgstr "Potrdite, da se PIN prikazan na \"%1\" ujema s PIN čarovnika."
-
-#. i18n: ectx: property (text), widget (QLabel, confirmLbl)
-#: wizard/pages/ssppairing.ui:117
-#, no-c-format, kde-format
-msgid "Connecting to %1 ..."
-msgstr "Povezovanje z %1 ..."
-
-#, fuzzy
-#~| msgctxt "This device is of type Network"
-#~| msgid "Network"
-#~ msgid "Network"
-#~ msgstr "Omrežje"
-
-#~ msgid "Untitled device"
-#~ msgstr "Naprava brez imena"
-
-#, fuzzy
-#~| msgid "Untitled device"
-#~ msgid "Find device"
-#~ msgstr "Naprava brez imena"
-
-#~ msgctxt "PIN Validation page title of the wizard"
-#~ msgid "PIN Validation"
-#~ msgstr "Potrjevanje PIN-a"
-
-#, fuzzy
-#~| msgctxt "Notification button to know if the pin is correct or not"
-#~| msgid "PIN correct"
-#~ msgid "PIN correct"
-#~ msgstr "Pravilen"
-
-#, fuzzy
-#~| msgctxt "Notification button to say that the PIN is wrong"
-#~| msgid "PIN incorrect"
-#~ msgid "PIN incorrect"
-#~ msgstr "Napačen"
-
-#~ msgid "Next"
-#~ msgstr "Naprej"
-
-#, fuzzy
-#~| msgid ""
-#~| "If your device has a way to introduce the PIN, do it, if not just wait a "
-#~| "moment"
-#~ msgid ""
-#~ "If your device has a way to introduce the PIN, then introduce it; "
-#~ "otherwise, just wait a moment."
-#~ msgstr ""
-#~ "Če ima naprava možnost vnosa PIN-a, ga vnesite, v nasprotnem počakajte "
-#~ "nekaj trenutkov"
-
-#~ msgctxt "Change the alias of a device"
-#~ msgid "Rename"
-#~ msgstr "Preimenuj"
-
-#~ msgctxt "Untrust a device"
-#~ msgid "Untrust"
-#~ msgstr "Ne zaupaj več"
-
-#~ msgid "Bluetooth Monolithic"
-#~ msgstr "Monolitični Bluetooth"
-
-#~ msgctxt "Introduction page title of the wizard"
-#~ msgid "Introduction"
-#~ msgstr "Uvod"
-
-#~ msgid "Choose your PIN mode"
-#~ msgstr "Izberite način za PIN"
-
-#~ msgid "Enable receiving files"
-#~ msgstr "Omogoči prejemanje datotek"
-
-#, fuzzy
-#~| msgid ""
-#~| "With this wizard you will be able to connect and configure your "
-#~| "bluetooth devices."
-#~ msgid ""
-#~ "Using this wizard you will be able to connect and configure your "
-#~ "Bluetooth devices."
-#~ msgstr ""
-#~ "S pomočjo tega čarovnika boste lahko povezali in nastavili svoje naprave "
-#~ "Bluetooth."
-
-#, fuzzy
-#~| msgid ""
-#~| "No bluetooth adapters have been found\n"
-#~| "\n"
-#~| "Plug one to continue"
-#~ msgid ""
-#~ "No Bluetooth adapters have been found.\n"
-#~ "\n"
-#~ "Plug one to continue."
-#~ msgstr ""
-#~ "Najdenega ni bilo nobenega vmesnika Bluetooth\n"
-#~ "\n"
-#~ "Za nadaljevanje ga priključite"
-
-#~ msgid "Automatic PIN"
-#~ msgstr "Samodejni PIN"
-
-#~ msgid ""
-#~ "Detects the right PIN to use in almost all cases. If you do not know the "
-#~ "PIN of your devices, choose this option."
-#~ msgstr ""
-#~ "V skoraj vsakem primeru zazna pravi PIN. Če ne veste PIN-a za napravo, "
-#~ "izberite to možnost."
-
-#~ msgid "Custom PIN"
-#~ msgstr "PIN po meri"
-
-#~ msgid "Type your PIN"
-#~ msgstr "Vnesite PIN"
-
-#~ msgid "Device to send files to"
-#~ msgstr "Naprava, na katero bodo poslane datoteke"
-
-#, fuzzy
-#~| msgid "From"
-#~ msgid "Form"
-#~ msgstr "Z"
-
-#~ msgid "Transfer destination directory"
-#~ msgstr "Ciljna mapa za prenos"
-
-#~ msgid "Save the incoming path in:"
-#~ msgstr "Prejete datoteke shrani v:"
-
-#~ msgid "Send the selected files to the selected device"
-#~ msgstr "Pošljite izbrane datoteke na izbrano napravo"
-
-#~ msgid "Re-scan"
-#~ msgstr "Preglej znova"
-
-#, fuzzy
-#~| msgid ""
-#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
-#~| "TR/REC-html40/strict.dtd\">\n"
-#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~| "css\">\n"
-#~| "p, li { white-space: pre-wrap; }\n"
-#~| "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; "
-#~| "font-weight:400; font-style:normal;\">\n"
-#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~| "right:0px; -qt-block-indent:0; text-indent:0px;\">Choose this option "
-#~| "only if you know the PIN of your devices which <span style=\" font-"
-#~| "weight:600;\">can't be empty</span> and must be at least <span style=\" "
-#~| "font-weight:600;\">4 numbers </span></p></body></html>"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Choose this option only "
-#~ "if you know the PIN of your devices which <span style=\" font-weight:600;"
-#~ "\">cannot be empty</span> and must be at least <span style=\" font-"
-#~ "weight:600;\">4 numbers </span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">To možnost izberite, če "
-#~ "veste PIN za napravo. Ta <span style=\" font-weight:600;\">ne sme biti "
-#~ "prazen</span> in mora vsebovati vsaj <span style=\" font-weight:600;\">4 "
-#~ "števke</span></p></body></html>"
-
-#~ msgid "To"
-#~ msgstr "Na"
-
-#~ msgid "No bluetooth adapter has been found"
-#~ msgstr "Najdenega ni bilo nobenega vmesnika Bluetooth"
-
-#~ msgid "Receive files configuration"
-#~ msgstr "Nastavitev prejemanja datotek"
-
-#~ msgid "Manage devices"
-#~ msgstr "Upravljanje naprav"
-
-#~ msgid "Configure adapters"
-#~ msgstr "Nastavljanje vmesnikov"
-
-#~ msgid "No known devices found"
-#~ msgstr "Najdene ni bilo nobene znane naprave"
-
-#~ msgid "Service Discovery Server"
-#~ msgstr "Strežnik za odkrivanje storitev"
-
-#~ msgid "Browse Group"
-#~ msgstr "Brskalna skupina"
-
-#~ msgid "Public Browse Group"
-#~ msgstr "Javna brskalna skupina"
-
-#~ msgid "Serial Port"
-#~ msgstr "Zaporedna vrata"
-
-#~ msgid "LAN Access Using PPP"
-#~ msgstr "Dostop do krajevnega omrežja prek PPP"
-
-#~ msgid "Cordless Telephony"
-#~ msgstr "Brezžična telefonija"
-
-#~ msgid "Audio Source"
-#~ msgstr "Zvočni vir"
-
-#~ msgid "Audio Sink"
-#~ msgstr "Zvočni ponor"
-
-#~ msgid "AV Remote Control Target"
-#~ msgstr "Tarča daljinskega upravljalnika"
-
-#~ msgid "Advanced Audio Distribution"
-#~ msgstr "Napredna zvočna distribucija"
-
-#~ msgid "AV Remote Control"
-#~ msgstr "Daljinski upravljalnik"
-
-#~ msgid "Video Conferencing"
-#~ msgstr "Video konferenca"
-
-#~ msgid "Fax"
-#~ msgstr "Faks"
-
-#~ msgid "Headset Audio Gateway"
-#~ msgstr "Zvočni prehod za slušalke"
-
-#~ msgid "WAP Client"
-#~ msgstr "Odjemalec WAP"
-
-#~ msgid "Direct Printing"
-#~ msgstr "Neposredno tiskanje"
-
-#~ msgid "Reference Printing"
-#~ msgstr "Referenčno tiskanje"
-
-#~ msgid "Imaging"
-#~ msgstr "Slika"
-
-#~ msgid "Hands free"
-#~ msgstr "Brezročno"
-
-#~ msgid "Hands free Audio Gateway"
-#~ msgstr "Prehod za brezročni zvok"
-
-#~ msgid "Basic Printing"
-#~ msgstr "Osnovno tiskanje"
-
-#~ msgid "Printing Status"
-#~ msgstr "Stanje tiskanja"
-
-#~ msgid "Common ISDN Access"
-#~ msgstr "Običajen dostop ISDN"
-
-#~ msgid "Video Conferencing GW"
-#~ msgstr "Prehod za video konferenco"
-
-#~ msgid "Audio Video"
-#~ msgstr "Zvok in video"
-
-#~ msgid "SIM Access"
-#~ msgstr "Dostop SIM"
-
-#~ msgid "PnP Information"
-#~ msgstr "Podatki PnP"
-
-#~ msgid "Generic Networking"
-#~ msgstr "Splošno mreženje"
-
-#~ msgid "Generic File Transfer"
-#~ msgstr "Splošen prenos datotek"
-
-#~ msgid "Generic Audio"
-#~ msgstr "Splošen zvok"
-
-#~ msgid "Generic Telephony"
-#~ msgstr "Splošna telefonija"

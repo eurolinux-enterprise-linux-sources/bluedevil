@@ -1,0 +1,427 @@
+From 725524d8e23fbc5fad9aab00cbaa3d66589baf14 Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Wed, 31 Dec 2014 12:07:56 +0100
+Subject: [PATCH 07/20] wizard: Add Success page
+
+Instead of closing the wizard, show a final page
+to user to indicate the pairing was completed successfully.
+---
+ src/wizard/CMakeLists.txt      |  2 ++
+ src/wizard/bluewizard.cpp      |  2 ++
+ src/wizard/bluewizard.h        |  2 +-
+ src/wizard/pages/fail.cpp      |  2 ++
+ src/wizard/pages/fail.ui       | 10 +++++++
+ src/wizard/pages/nopairing.cpp | 46 +++++++++++-----------------
+ src/wizard/pages/nopairing.h   | 10 +++----
+ src/wizard/pages/success.cpp   | 64 +++++++++++++++++++++++++++++++++++++++
+ src/wizard/pages/success.h     | 46 ++++++++++++++++++++++++++++
+ src/wizard/pages/success.ui    | 68 ++++++++++++++++++++++++++++++++++++++++++
+ 10 files changed, 216 insertions(+), 36 deletions(-)
+ create mode 100644 src/wizard/pages/success.cpp
+ create mode 100644 src/wizard/pages/success.h
+ create mode 100644 src/wizard/pages/success.ui
+
+diff --git a/src/wizard/CMakeLists.txt b/src/wizard/CMakeLists.txt
+index 847e672..f2ada0f 100644
+--- a/src/wizard/CMakeLists.txt
++++ b/src/wizard/CMakeLists.txt
+@@ -10,6 +10,7 @@ set(wizard_SRCS
+     pages/keyboardpairing.cpp
+     pages/ssppairing.cpp
+     pages/fail.cpp
++    pages/success.cpp
+ )
+ 
+ kde4_add_ui_files(wizard_SRCS
+@@ -19,6 +20,7 @@ kde4_add_ui_files(wizard_SRCS
+             pages/keyboardpairing.ui
+             pages/ssppairing.ui
+             pages/fail.ui
++            pages/success.ui
+ )
+ 
+ kde4_add_executable(bluedevil-wizard ${wizard_SRCS})
+diff --git a/src/wizard/bluewizard.cpp b/src/wizard/bluewizard.cpp
+index de241b0..91cb28f 100644
+--- a/src/wizard/bluewizard.cpp
++++ b/src/wizard/bluewizard.cpp
+@@ -24,6 +24,7 @@
+ #include "pages/legacypairingdatabase.h"
+ #include "pages/keyboardpairing.h"
+ #include "pages/ssppairing.h"
++#include "pages/success.h"
+ #include "pages/fail.h"
+ 
+ #include <QApplication>
+@@ -57,6 +58,7 @@ BlueWizard::BlueWizard(const KUrl &url) : QWizard(), m_device(0), m_manualPin(fa
+     setPage(LegacyPairingDatabase, new LegacyPairingPageDatabase(this));
+     setPage(KeyboardPairing, new KeyboardPairingPage(this));
+     setPage(SSPPairing, new SSPPairingPage(this));
++    setPage(Success, new SuccessPage(this));
+     setPage(Fail, new FailPage(this));
+ 
+     setButton(QWizard::BackButton, new KPushButton(KStandardGuiItem::back(KStandardGuiItem::UseRTL)));
+diff --git a/src/wizard/bluewizard.h b/src/wizard/bluewizard.h
+index fcb2015..4685aca 100644
+--- a/src/wizard/bluewizard.h
++++ b/src/wizard/bluewizard.h
+@@ -53,7 +53,7 @@ public:
+ 
+     WizardAgent* agent() const;
+ 
+-    enum {Discover, NoPairing, LegacyPairing, LegacyPairingDatabase, KeyboardPairing, SSPPairing, Fail, Connect};
++    enum {Discover, NoPairing, LegacyPairing, LegacyPairingDatabase, KeyboardPairing, SSPPairing, Success, Fail, Connect};
+ 
+ public Q_SLOTS:
+     void restartWizard();
+diff --git a/src/wizard/pages/fail.cpp b/src/wizard/pages/fail.cpp
+index f7c065e..e9f44ef 100644
+--- a/src/wizard/pages/fail.cpp
++++ b/src/wizard/pages/fail.cpp
+@@ -37,6 +37,8 @@ FailPage::FailPage(BlueWizard* parent) : QWizardPage(parent)
+ , m_wizard(parent)
+ {
+     setupUi(this);
++
++    failIcon->setPixmap(KIcon("task-reject").pixmap(48));
+ }
+ 
+ void FailPage::initializePage()
+diff --git a/src/wizard/pages/fail.ui b/src/wizard/pages/fail.ui
+index 0470e8f..375a4fb 100644
+--- a/src/wizard/pages/fail.ui
++++ b/src/wizard/pages/fail.ui
+@@ -30,6 +30,16 @@
+       </spacer>
+      </item>
+      <item>
++      <widget class="QLabel" name="failIcon">
++       <property name="maximumSize">
++        <size>
++         <width>48</width>
++         <height>48</height>
++        </size>
++       </property>
++      </widget>
++     </item>
++     <item>
+       <widget class="QLabel" name="failLbl">
+        <property name="text">
+         <string/>
+diff --git a/src/wizard/pages/nopairing.cpp b/src/wizard/pages/nopairing.cpp
+index 65be653..c169a49 100644
+--- a/src/wizard/pages/nopairing.cpp
++++ b/src/wizard/pages/nopairing.cpp
+@@ -32,9 +32,10 @@
+ 
+ using namespace BlueDevil;
+ 
+-NoPairingPage::NoPairingPage(BlueWizard* parent) : QWizardPage(parent)
+-, m_validPage(false)
+-, m_wizard(parent)
++NoPairingPage::NoPairingPage(BlueWizard *parent)
++    : QWizardPage(parent)
++    , m_success(false)
++    , m_wizard(parent)
+ {
+     setupUi(this);
+     m_working = new KPixmapSequenceOverlayPainter(this);
+@@ -42,6 +43,14 @@ NoPairingPage::NoPairingPage(BlueWizard* parent) : QWizardPage(parent)
+     m_working->start();
+ }
+ 
++int NoPairingPage::nextId() const
++{
++    if (m_success) {
++        return BlueWizard::Success;
++    }
++    return BlueWizard::Fail;
++}
++
+ void NoPairingPage::initializePage()
+ {
+     kDebug();
+@@ -49,10 +58,6 @@ void NoPairingPage::initializePage()
+ 
+     connecting->setText(connecting->text().append(m_wizard->device()->name()));
+ 
+-    //It can happen that the device is technically connected and trusted but we are not connected
+-    //to the profile. We have no way to know if the profile was activated or not so we have to relay
+-    //on a timeout (10s)
+-    QTimer::singleShot(10000, this, SLOT(timeout()));
+     connect(m_wizard->device(), SIGNAL(connectedChanged(bool)), SLOT(connectedChanged(bool)));
+     connect(m_wizard->device(), SIGNAL(trustedChanged(bool)), SLOT(connectedChanged(bool)));
+ 
+@@ -60,30 +65,14 @@ void NoPairingPage::initializePage()
+     m_wizard->device()->setTrusted(true);
+ }
+ 
+-void NoPairingPage::timeout()
+-{
+-    connectedChanged(true);
+-}
+-
+ void NoPairingPage::connectedChanged(bool connected)
+ {
+-    kDebug();
+-
+-    m_validPage = connected;
+-    if (m_validPage) {
+-        kDebug() << "Done";
+-        m_wizard->done(0);
+-    }
+-}
+-
+-bool NoPairingPage::validatePage()
+-{
+-    return m_validPage;
+-}
++    kDebug() << "Connect finished" << connected;
+ 
+-int NoPairingPage::nextId() const
+-{
+-    return -1;
++    // Connect may fail but that doesn't really mean the device was setup incorrectly
++    // Device::connectDevice will fail eg. when A2DP profile could not be connected due to missing pulseaudio plugin
++    m_success = true;
++    QTimer::singleShot(500, m_wizard, SLOT(next()));
+ }
+ 
+ QList<QWizard::WizardButton> NoPairingPage::wizardButtonsLayout() const
+@@ -91,6 +80,5 @@ QList<QWizard::WizardButton> NoPairingPage::wizardButtonsLayout() const
+     QList <QWizard::WizardButton> list;
+     list << QWizard::Stretch;
+     list << QWizard::CancelButton;
+-
+     return list;
+ }
+diff --git a/src/wizard/pages/nopairing.h b/src/wizard/pages/nopairing.h
+index 9b9f4bf..ca03fb8 100644
+--- a/src/wizard/pages/nopairing.h
++++ b/src/wizard/pages/nopairing.h
+@@ -46,21 +46,19 @@ Q_OBJECT
+ public:
+     NoPairingPage(BlueWizard* parent = 0);
+ 
+-    virtual void initializePage();
+-    virtual bool validatePage();
+     virtual int nextId() const;
++    virtual void initializePage();
+ 
+ protected:
+     QList <QWizard::WizardButton> wizardButtonsLayout() const;
+ 
+ private Q_SLOTS:
+-    void timeout();
+     void connectedChanged(bool connected);
+ 
+ private:
+-    bool                          m_validPage;
+-    BlueWizard                    *m_wizard;
++    bool m_success;
++    BlueWizard *m_wizard;
+     KPixmapSequenceOverlayPainter *m_working;
+ };
+ 
+-#endif // NOPAIRING_H
+\ No newline at end of file
++#endif // NOPAIRING_H
+diff --git a/src/wizard/pages/success.cpp b/src/wizard/pages/success.cpp
+new file mode 100644
+index 0000000..44b70fa
+--- /dev/null
++++ b/src/wizard/pages/success.cpp
+@@ -0,0 +1,64 @@
++/*****************************************************************************
++ * This file is part of the KDE project                                      *
++ *                                                                           *
++ * Copyright (C) 2010 Alejandro Fiestas Olivares <afiestas@kde.org>          *
++ * Copyright (C) 2010-2011 UFO Coders <info@ufocoders.com>                   *
++ * Copyright (C) 2014 David Rosca <nowrep@gmail.com>                         *
++ *                                                                           *
++ * This library is free software; you can redistribute it and/or             *
++ * modify it under the terms of the GNU Library General Public               *
++ * License as published by the Free Software Foundation; either              *
++ * version 2 of the License, or (at your option) any later version.          *
++ *                                                                           *
++ * This library is distributed in the hope that it will be useful,           *
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU         *
++ * Library General Public License for more details.                          *
++ *                                                                           *
++ * You should have received a copy of the GNU Library General Public License *
++ * along with this library; see the file COPYING.LIB.  If not, write to      *
++ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
++ * Boston, MA 02110-1301, USA.                                               *
++ *****************************************************************************/
++
++#include "success.h"
++#include "bluewizard.h"
++
++#include <KDebug>
++#include <KLocalizedString>
++
++#include <bluedevil/bluedevildevice.h>
++
++SuccessPage::SuccessPage(BlueWizard *parent)
++    : QWizardPage(parent)
++    , m_wizard(parent)
++{
++    setupUi(this);
++
++    successIcon->setPixmap(KIcon("task-complete").pixmap(48));
++}
++
++void SuccessPage::initializePage()
++{
++    kDebug() << "Initialize Success Page";
++
++    QList<QWizard::WizardButton> list;
++    list << QWizard::Stretch;
++    list << QWizard::FinishButton;
++
++    m_wizard->setButtonLayout(list);
++
++    setFinalPage(true);
++
++    QString deviceName = m_wizard->device()->name();
++    if (deviceName.isEmpty()) {
++        successLbl->setText(i18nc("This string is shown when the wizard succeeds", "The setup of the device has succeeded"));
++    } else {
++        successLbl->setText(i18n("The setup of %1 has succeeded", deviceName));
++    }
++}
++
++int SuccessPage::nextId() const
++{
++    return -1;
++}
+diff --git a/src/wizard/pages/success.h b/src/wizard/pages/success.h
+new file mode 100644
+index 0000000..a41f73e
+--- /dev/null
++++ b/src/wizard/pages/success.h
+@@ -0,0 +1,46 @@
++/*****************************************************************************
++ * This file is part of the KDE project                                      *
++ *                                                                           *
++ * Copyright (C) 2010 Alejandro Fiestas Olivares <afiestas@kde.org>          *
++ * Copyright (C) 2010-2011 UFO Coders <info@ufocoders.com>                   *
++ * Copyright (C) 2014 David Rosca <nowrep@gmail.com>                         *
++ *                                                                           *
++ * This library is free software; you can redistribute it and/or             *
++ * modify it under the terms of the GNU Library General Public               *
++ * License as published by the Free Software Foundation; either              *
++ * version 2 of the License, or (at your option) any later version.          *
++ *                                                                           *
++ * This library is distributed in the hope that it will be useful,           *
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU         *
++ * Library General Public License for more details.                          *
++ *                                                                           *
++ * You should have received a copy of the GNU Library General Public License *
++ * along with this library; see the file COPYING.LIB.  If not, write to      *
++ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
++ * Boston, MA 02110-1301, USA.                                               *
++ *****************************************************************************/
++
++#ifndef SUCCESS_H
++#define SUCCESS_H
++
++#include "ui_success.h"
++#include <QWizardPage>
++
++class BlueWizard;
++
++class SuccessPage : public QWizardPage, Ui::Success
++{
++    Q_OBJECT
++
++public:
++    SuccessPage(BlueWizard *parent = 0);
++
++    virtual void initializePage();
++    virtual int nextId() const;
++
++private:
++    BlueWizard *m_wizard;
++};
++
++#endif // SUCCESS_H
+diff --git a/src/wizard/pages/success.ui b/src/wizard/pages/success.ui
+new file mode 100644
+index 0000000..3630db3
+--- /dev/null
++++ b/src/wizard/pages/success.ui
+@@ -0,0 +1,68 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<ui version="4.0">
++ <class>Success</class>
++ <widget class="QWidget" name="Success">
++  <property name="geometry">
++   <rect>
++    <x>0</x>
++    <y>0</y>
++    <width>400</width>
++    <height>300</height>
++   </rect>
++  </property>
++  <layout class="QVBoxLayout" name="verticalLayout">
++   <item>
++    <layout class="QHBoxLayout" name="horizontalLayout">
++     <item>
++      <spacer name="horizontalSpacer">
++       <property name="orientation">
++        <enum>Qt::Horizontal</enum>
++       </property>
++       <property name="sizeType">
++        <enum>QSizePolicy::Fixed</enum>
++       </property>
++       <property name="sizeHint" stdset="0">
++        <size>
++         <width>10</width>
++         <height>20</height>
++        </size>
++       </property>
++      </spacer>
++     </item>
++     <item>
++      <widget class="QLabel" name="successIcon">
++       <property name="maximumSize">
++        <size>
++         <width>48</width>
++         <height>48</height>
++        </size>
++       </property>
++      </widget>
++     </item>
++     <item>
++      <widget class="QLabel" name="successLbl">
++       <property name="text">
++        <string/>
++       </property>
++      </widget>
++     </item>
++    </layout>
++   </item>
++   <item>
++    <spacer name="verticalSpacer">
++     <property name="orientation">
++      <enum>Qt::Vertical</enum>
++     </property>
++     <property name="sizeHint" stdset="0">
++      <size>
++       <width>20</width>
++       <height>40</height>
++      </size>
++     </property>
++    </spacer>
++   </item>
++  </layout>
++ </widget>
++ <resources/>
++ <connections/>
++</ui>
+-- 
+2.1.0
+

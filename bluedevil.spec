@@ -1,55 +1,59 @@
 
 Name:           bluedevil
 Summary:        Bluetooth stack for KDE
-Version:        1.3
-Release:        4%{?dist}
+Version:        2.1
+Release:        1%{?dist}
 
 License:        GPLv2+
 URL:            https://projects.kde.org/projects/extragear/base/bluedevil
-Source0:        http://download.kde.org/%{?pre:un}stable/bluedevil/%{version}%{?pre:-%{pre}}/src/bluedevil-%{version}%{?pre:-%{pre}}.tar.bz2
+%if 0%{?snap:1}
+Source0:        bluedevil-%{version}-%{git_short}.tar.xz
+%else
+Source0:        http://download.kde.org/%{?pre:un}stable/bluedevil/%{version}%{?pre:-%{pre}}/src/bluedevil-%{version}%{?pre:-%{pre}}.tar.xz
+%endif
 # support (or not) same arch's that obexd does
 ExcludeArch:    s390 s390x
 
 ## upstream patches
+Patch2: 0002-KCM-SystemCheck-Add-NoUsableAdapter-error.patch
+Patch4: 0004-obexftpdaemon-session-method-now-takes-target-parame.patch
+Patch5: 0005-kio_obexftp-Prefer-pcsuite-target-for-S60-devices.patch
+Patch7: 0007-wizard-Add-Success-page.patch
+Patch17: 0017-filereceiver-Fix-crash-when-sending-device-is-null.patch
+Patch18: 0018-kio_obexftp-Fix-finished-called-twice-in-get.patch
+Patch21: 0021-daemon-Don-t-try-to-infinitely-kill-monolithic-when-.patch
 
-BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  kdelibs4-devel
-BuildRequires:  libbluedevil-devel
+BuildRequires:  libbluedevil-devel >= %{version}
 
 Provides:       dbus-bluez-pin-helper
 
 Obsoletes:      kbluetooth < 0.4.2-3
+Obsoletes:      bluedevil-devel < 2.0.0-0.10
 
-# not sure if just kdelibs is enough -- Rex
-Requires:       kde-runtime%{?_kde4_version: >= %{_kde4_version}}
-
-## Runtime requirements for file transfers, as per README:
-Requires:       obex-data-server
-# This package contains the obexd client only, which is all we want:
-Requires:       obexd
-# (The obexd server conflicts with obex-data-server and is disabled in Fedora.)
-
+Requires:       kde-runtime
+Requires:       libbluedevil%{?_isa} >= %{version}
 Requires:       pulseaudio-module-bluetooth
 
 
 %description
 BlueDevil is the bluetooth stack for KDE.
 
-%package        devel
-Summary:        Development files for %{name}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-%description    devel
+%package autostart
+Summary: Autostart support for non-KDE desktops
+Requires: %{name} = %{version}-%{release}
+%description autostart
 %{summary}.
 
 
 %prep
-%setup -q -n %{name}-%{version}%{?pre:-%{pre}}
+%autosetup -n %{name}-%{version}%{?pre:-%{pre}} -p1
 
 
 %build
-mkdir -p %{_target_platform}
+mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} ..
 popd
@@ -62,55 +66,66 @@ make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
 
 %find_lang %{name} --with-kde
 
+desktop-file-install \
+  --dir=%{buildroot}%{_sysconfdir}/xdg/autostart/ \
+  --add-not-show-in=KDE \
+  %{buildroot}%{_kde4_datadir}/applications/kde4/bluedevil-monolithic.desktop
+
 
 %check
-# FIXME: .desktop files need some mime/Categories love to validate properly -- Rex
-for desktop_file in %{buildroot}%{_kde4_datadir}/applications/kde4/*.desktop ; do
-desktop-file-validate ${desktop_file} ||:
-done
+desktop-file-validate %{buildroot}%{_kde4_datadir}/applications/kde4/bluedevil-monolithic.desktop
+desktop-file-validate %{buildroot}%{_kde4_datadir}/applications/kde4/bluedevil-sendfile.desktop
+desktop-file-validate %{buildroot}%{_kde4_datadir}/applications/kde4/bluedevil-wizard.desktop
 
+%post
+touch --no-create %{_kde4_datadir}/mime/packages &> /dev/null || :
 
 %postun
 if [ $1 -eq 0 ] ; then
     update-desktop-database -q &> /dev/null
-    update-mime-database %{_kde4_datadir}/mime &> /dev/null
+    touch --no-create %{_kde4_datadir}/mime/packages &> /dev/null || :
+    update-mime-database %{?fedora:-n} %{_kde4_datadir}/mime &> /dev/null || :
 fi
 
 %posttrans
 update-desktop-database -q &> /dev/null
-update-mime-database %{_kde4_datadir}/mime >& /dev/null
+update-mime-database %{_kde4_datadir}/mime &> /dev/null || :
 
 %files -f %{name}.lang
 %doc README
 %{_kde4_appsdir}/bluedevil/
 %{_kde4_appsdir}/bluedevilwizard/
 
-%{_kde4_bindir}/bluedevil-audio
-%{_kde4_bindir}/bluedevil-helper
-%{_kde4_bindir}/bluedevil-input
+
 %{_kde4_bindir}/bluedevil-monolithic
-%{_kde4_bindir}/bluedevil-network-dun
-%{_kde4_bindir}/bluedevil-network-panu
 %{_kde4_bindir}/bluedevil-sendfile
 %{_kde4_bindir}/bluedevil-wizard
-%{_kde4_datadir}/applications/kde4/*.desktop
-%{_datadir}/dbus-1/services/*.service
-%{_kde4_datadir}/kde4/services/*
-%{_kde4_datadir}/kde4/servicetypes/actionplugin.desktop
+%{_kde4_datadir}/applications/kde4/bluedevil-monolithic.desktop
+%{_kde4_datadir}/applications/kde4/bluedevil-sendfile.desktop
+%{_kde4_datadir}/applications/kde4/bluedevil-wizard.desktop
+%{_kde4_datadir}/kde4/services/bluedevil*.desktop
+%{_kde4_datadir}/kde4/services/*.protocol
+%{_kde4_datadir}/kde4/services/kded/*.desktop
 %{_kde4_datadir}/mime/packages/bluedevil-mime.xml
-%{_kde4_libdir}/kde4/*
-%{_kde4_libdir}/libbluedevilaction.so
+%{_kde4_libdir}/kde4/*.so
 %{_kde4_libexecdir}/bluedevil-authorize
 %{_kde4_libexecdir}/bluedevil-confirmmodechange
 %{_kde4_libexecdir}/bluedevil-requestconfirmation
 %{_kde4_libexecdir}/bluedevil-requestpin
 
-%files devel
-%doc HACKING
-%{_includedir}/actionplugin.h
+%files autostart
+%{_sysconfdir}/xdg/autostart/bluedevil-monolithic.desktop
 
 
 %changelog
+* Mon May 25 2015 Jan Grulich <jgrulich@redhat.com> 2-1-1
+- Re-base to 2.1 (sync with F21)
+
+* Fri May 08 2015 Ray Strode <rstrode@redhat.com> 1.3-5
+- Rebuild against bluez5.  This won't work, but will
+  at least prevent broken dependencies
+  Related: #1174545 1219504
+
 * Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.3-4
 - Mass rebuild 2013-12-27
 

@@ -1,0 +1,327 @@
+From 6566e8d25e41eed5bf03124740320bc92caaca93 Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Thu, 25 Dec 2014 18:04:10 +0100
+Subject: [PATCH 02/20] KCM SystemCheck: Add NoUsableAdapter error
+
+Show "Your Bluetooth adapter is powered off" instead of
+"No Bluetooth adapters found" when there are adapters
+in system, but all of them powered off.
+
+Also drop support to build with kdelibs < 4.7
+---
+ src/kcmodule/systemcheck.cpp | 143 ++++++++-----------------------------------
+ src/kcmodule/systemcheck.h   |  31 ++--------
+ 2 files changed, 29 insertions(+), 145 deletions(-)
+
+diff --git a/src/kcmodule/systemcheck.cpp b/src/kcmodule/systemcheck.cpp
+index 44c47e5..6ad75d2 100644
+--- a/src/kcmodule/systemcheck.cpp
++++ b/src/kcmodule/systemcheck.cpp
+@@ -32,6 +32,7 @@
+ #include <kcolorscheme.h>
+ #include <kstandarddirs.h>
+ #include <klocalizedstring.h>
++#include <kmessagewidget.h>
+ 
+ #include <QtGui/QLabel>
+ #include <QtGui/QWidget>
+@@ -39,93 +40,12 @@
+ #include <QtGui/QBoxLayout>
+ #include <QtGui/QPaintEvent>
+ 
+-#if KDE_IS_VERSION(4,6,41)
+-#include <kmessagewidget.h>
+-#else
+-
+-class ErrorWidget
+-    : public QWidget
+-{
+-public:
+-    ErrorWidget(QWidget *parent = 0);
+-    virtual ~ErrorWidget();
+-
+-    void setIcon(const QString &icon);
+-    void setText(const QString &reason);
+-    void addAction(KPushButton *action);
+-
+-protected:
+-    virtual void paintEvent(QPaintEvent *event);
+-
+-private:
+-    QLabel      *m_icon;
+-    QLabel      *m_reason;
+-    QHBoxLayout *m_actions;
+-};
+-
+-ErrorWidget::ErrorWidget(QWidget *parent)
+-    : QWidget(parent)
+-    , m_icon(new QLabel(this))
+-    , m_reason(new QLabel(this))
+-    , m_actions(new QHBoxLayout)
+-{
+-    setAutoFillBackground(false);
+-
+-    m_actions->addStretch();
+-
+-    QHBoxLayout *layout = new QHBoxLayout;
+-    layout->addWidget(m_icon);
+-    layout->addWidget(m_reason, 1);
+-
+-    QVBoxLayout *outter = new QVBoxLayout;
+-    outter->addLayout(layout);
+-    outter->addLayout(m_actions);
+-
+-    setLayout(outter);
+-}
+-
+-ErrorWidget::~ErrorWidget()
+-{
+-}
+-
+-void ErrorWidget::setIcon(const QString &icon)
+-{
+-    m_icon->setPixmap(KIconLoader::global()->loadIcon(icon, KIconLoader::Dialog));
+-}
+-
+-void ErrorWidget::setText(const QString &reason)
+-{
+-    m_reason->setText(reason);
+-}
+-
+-void ErrorWidget::addAction(KPushButton *action)
+-{
+-    action->setAutoFillBackground(false);
+-    m_actions->addWidget(action);
+-}
+-
+-void ErrorWidget::paintEvent(QPaintEvent *event)
+-{
+-    const QRect r = event->rect();
+-    const KColorScheme colorScheme(QPalette::Active, KColorScheme::Window);
+-
+-    QPainter p(this);
+-    p.setRenderHint(QPainter::Antialiasing);
+-
+-    QPainterPath path;
+-    path.addRoundedRect(0, 0, r.width(), r.height(), 10, 10);
+-    p.fillPath(path, colorScheme.background(KColorScheme::NegativeBackground));
+-
+-    QWidget::paintEvent(event);
+-}
+-#endif
+-////////////////////////////////////////////////////////////////////////////////////////////////////
+-
+ SystemCheck::SystemCheck(QWidget *parent)
+     : QObject(parent)
+     , m_kded(new KDED("org.kde.kded", "/kded", QDBusConnection::sessionBus()))
+     , m_parent(parent)
+     , m_noAdaptersError(0)
++    , m_noUsableAdapterError(0)
+     , m_notDiscoverableAdapterError(0)
+     , m_disabledNotificationsError(0)
+ {
+@@ -133,9 +53,6 @@ SystemCheck::SystemCheck(QWidget *parent)
+ 
+ SystemCheck::~SystemCheck()
+ {
+-    m_noAdaptersError = 0;
+-    m_notDiscoverableAdapterError = 0;
+-    m_disabledNotificationsError = 0;
+     delete m_kded;
+ }
+ 
+@@ -145,18 +62,22 @@ void SystemCheck::createWarnings(QVBoxLayout *layout)
+         return;
+     }
+ 
+-#if KDE_IS_VERSION(4,6,41)
+     m_noAdaptersError = new KMessageWidget(m_parent);
+     m_noAdaptersError->setMessageType(KMessageWidget::Error);
+     m_noAdaptersError->setCloseButtonVisible(false);
+-#else
+-    m_noAdaptersError = new ErrorWidget(m_parent);
+-    m_noAdaptersError->setIcon("window-close");
+-#endif
+     m_noAdaptersError->setText(i18n("No Bluetooth adapters have been found."));
+     layout->addWidget(m_noAdaptersError);
+ 
+-#if KDE_IS_VERSION(4,6,41)
++    m_noUsableAdapterError = new KMessageWidget(m_parent);
++    m_noUsableAdapterError->setMessageType(KMessageWidget::Warning);
++    m_noUsableAdapterError->setCloseButtonVisible(false);
++    m_noUsableAdapterError->setText(i18n("Your Bluetooth adapter is powered off."));
++
++    KAction *fixNoUsableAdapter = new KAction(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_noUsableAdapterError);
++    connect(fixNoUsableAdapter, SIGNAL(triggered(bool)), this, SLOT(fixNoUsableAdapterError()));
++    m_noUsableAdapterError->addAction(fixNoUsableAdapter);
++    layout->addWidget(m_noUsableAdapterError);
++
+     m_notDiscoverableAdapterError = new KMessageWidget(m_parent);
+     m_notDiscoverableAdapterError->setMessageType(KMessageWidget::Warning);
+     m_notDiscoverableAdapterError->setCloseButtonVisible(false);
+@@ -164,19 +85,10 @@ void SystemCheck::createWarnings(QVBoxLayout *layout)
+     KAction *fixNotDiscoverableAdapter = new KAction(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_notDiscoverableAdapterError);
+     connect(fixNotDiscoverableAdapter, SIGNAL(triggered(bool)), this, SLOT(fixNotDiscoverableAdapterError()));
+     m_notDiscoverableAdapterError->addAction(fixNotDiscoverableAdapter);
+-#else
+-    m_notDiscoverableAdapterError = new ErrorWidget(m_parent);
+-    m_notDiscoverableAdapterError->setIcon("edit-find");
+-
+-    KPushButton *fixNotDiscoverableAdapter = new KPushButton(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_notDiscoverableAdapterError);
+-    connect(fixNotDiscoverableAdapter, SIGNAL(clicked()), this, SLOT(fixNotDiscoverableAdapterError()));
+-    m_notDiscoverableAdapterError->addAction(fixNotDiscoverableAdapter);
+-#endif
+     m_notDiscoverableAdapterError->setText(i18n("Your default Bluetooth adapter is not visible for remote devices."));
+ 
+     layout->addWidget(m_notDiscoverableAdapterError);
+ 
+-#if KDE_IS_VERSION(4,6,41)
+     m_disabledNotificationsError = new KMessageWidget(m_parent);
+     m_disabledNotificationsError->setMessageType(KMessageWidget::Warning);
+     m_disabledNotificationsError->setCloseButtonVisible(false);
+@@ -184,19 +96,10 @@ void SystemCheck::createWarnings(QVBoxLayout *layout)
+     KAction *fixDisabledNotifications = new KAction(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_disabledNotificationsError);
+     connect(fixDisabledNotifications, SIGNAL(triggered(bool)), this, SLOT(fixDisabledNotificationsError()));
+     m_disabledNotificationsError->addAction(fixDisabledNotifications);
+-#else
+-    m_disabledNotificationsError = new ErrorWidget(m_parent);
+-    m_disabledNotificationsError->setIcon("preferences-desktop-notification");
+-
+-    KPushButton *fixDisabledNotifications = new KPushButton(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_disabledNotificationsError);
+-    connect(fixDisabledNotifications, SIGNAL(clicked()), this, SLOT(fixDisabledNotificationsError()));
+-    m_disabledNotificationsError->addAction(fixDisabledNotifications);
+-#endif
+     m_disabledNotificationsError->setText(i18n("Interaction with Bluetooth system is not optimal."));
+ 
+     layout->addWidget(m_disabledNotificationsError);
+ 
+-#if KDE_IS_VERSION(4,6,41)
+     m_noKDEDRunning = new KMessageWidget(m_parent);
+     m_noKDEDRunning ->setMessageType(KMessageWidget::Warning);
+     m_noKDEDRunning->setCloseButtonVisible(false);
+@@ -204,14 +107,6 @@ void SystemCheck::createWarnings(QVBoxLayout *layout)
+     KAction *fixNoKDEDRunning = new KAction(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_noKDEDRunning);
+     connect(fixNoKDEDRunning, SIGNAL(triggered(bool)), this, SLOT(fixNoKDEDRunning()));
+     m_noKDEDRunning->addAction(fixNoKDEDRunning);
+-#else
+-    m_noKDEDRunning = new ErrorWidget(m_parent);
+-    m_noKDEDRunning->setIcon("dialog-warning");
+-
+-    KPushButton *fixNoKDEDRunning = new KPushButton(KIcon("dialog-ok-apply"), i18nc("Action to fix a problem", "Fix it"), m_noKDEDRunning);
+-    connect(fixNoKDEDRunning, SIGNAL(clicked()), this, SLOT(fixNoKDEDRunning()));
+-    m_noKDEDRunning->addAction(fixNoKDEDRunning);
+-#endif
+     m_noKDEDRunning->setText(i18n("Bluetooth is not completely enabled."));
+ 
+     layout->addWidget(m_noKDEDRunning);
+@@ -259,6 +154,7 @@ void SystemCheck::updateInformationState()
+ {
+     m_noAdaptersError->setEnabled(true);
+     m_noAdaptersError->setVisible(false);
++    m_noUsableAdapterError->setVisible(false);
+     m_notDiscoverableAdapterError->setVisible(false);
+     m_disabledNotificationsError->setVisible(false);
+     m_noKDEDRunning->setVisible(false);
+@@ -268,9 +164,14 @@ void SystemCheck::updateInformationState()
+         return;
+     }
+ 
++    if (BlueDevil::Manager::self()->adapters().isEmpty()) {
++        m_noAdaptersError->setVisible(true);
++        return;
++    }
++
+     BlueDevil::Adapter *const usableAdapter = BlueDevil::Manager::self()->usableAdapter();
+     if (!usableAdapter) {
+-        m_noAdaptersError->setVisible(true);
++        m_noUsableAdapterError->setVisible(true);
+         return;
+     }
+     if (!usableAdapter->isDiscoverable()) {
+@@ -293,6 +194,12 @@ void SystemCheck::fixNoKDEDRunning()
+     m_kded->loadModule("bluedevil");
+ }
+ 
++void SystemCheck::fixNoUsableAdapterError()
++{
++    m_noUsableAdapterError->setVisible(false);
++    BlueDevil::Manager::self()->adapters().first()->setPowered(true);
++}
++
+ void SystemCheck::fixNotDiscoverableAdapterError()
+ {
+     m_notDiscoverableAdapterError->setVisible(false);
+diff --git a/src/kcmodule/systemcheck.h b/src/kcmodule/systemcheck.h
+index e03daf9..ee94f7e 100644
+--- a/src/kcmodule/systemcheck.h
++++ b/src/kcmodule/systemcheck.h
+@@ -22,19 +22,12 @@
+ #define BLUEDEVIL_SYSTEM_CHECK_H
+ #include <QtCore/QObject>
+ 
+-#include <kdeversion.h>
+-
+ class QVBoxLayout;
+ 
+ class KDED;
+-#if KDE_IS_VERSION(4,6,41)
+ class KMessageWidget;
+-#else
+-class ErrorWidget;
+-#endif
+ 
+-class SystemCheck
+-    : public QObject
++class SystemCheck : public QObject
+ {
+     Q_OBJECT
+ 
+@@ -42,17 +35,6 @@ public:
+     SystemCheck(QWidget *parent);
+     virtual ~SystemCheck();
+ 
+-    struct SystemCheckResult {
+-        enum Result {
+-            NoWarnings = 0,
+-            BluetoothDisabled,
+-            NoAdapters,
+-            NotificationsDisabled,
+-            DefaultAdapterHidden
+-        } result;
+-        QWidget *warningWidget;
+-    };
+-
+     void createWarnings(QVBoxLayout *layout);
+ 
+     bool checkKDEDModuleLoaded();
+@@ -67,23 +49,18 @@ public Q_SLOTS:
+ 
+ private Q_SLOTS:
+     void fixNoKDEDRunning();
++    void fixNoUsableAdapterError();
+     void fixNotDiscoverableAdapterError();
+     void fixDisabledNotificationsError();
+ 
+ private:
+     KDED        *m_kded;
+     QWidget     *m_parent;
+-#if KDE_IS_VERSION(4,6,41)
+     KMessageWidget *m_noAdaptersError;
++    KMessageWidget *m_noUsableAdapterError;
+     KMessageWidget *m_noKDEDRunning;
+     KMessageWidget *m_notDiscoverableAdapterError;
+     KMessageWidget *m_disabledNotificationsError;
+-#else
+-    ErrorWidget *m_noAdaptersError;
+-    ErrorWidget *m_noKDEDRunning;
+-    ErrorWidget *m_notDiscoverableAdapterError;
+-    ErrorWidget *m_disabledNotificationsError;
+-#endif
+ };
+ 
+-#endif //BLUEDEVIL_SYSTEM_CHECK_H
+\ No newline at end of file
++#endif //BLUEDEVIL_SYSTEM_CHECK_H
+-- 
+2.1.0
+

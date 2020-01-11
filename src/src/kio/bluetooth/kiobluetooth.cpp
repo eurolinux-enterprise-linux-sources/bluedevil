@@ -35,10 +35,6 @@
 #include <KApplication>
 #include <KLocale>
 
-#include <bluedevil/bluedevil.h>
-
-using namespace BlueDevil;
-
 extern "C" int KDE_EXPORT kdemain(int argc, char **argv)
 {
     KAboutData about("kiobluetooth", "bluedevil", ki18n("kiobluetooth"), bluedevil_version);
@@ -70,40 +66,20 @@ KioBluetooth::KioBluetooth(const QByteArray &pool, const QByteArray &app)
     s.mimetype = "application/vnd.kde.bluedevil-sendfile";
     s.uuid = "00001105-0000-1000-8000-00805F9B34FB";
     m_supportedServices.insert("00001105-0000-1000-8000-00805F9B34FB", s);
+
     s.name = i18n("Browse Files");
     s.icon = "edit-find";
-    s.mimetype = "";
+    s.mimetype = QString();
     s.uuid = "00001106-0000-1000-8000-00805F9B34FB";
     m_supportedServices.insert("00001106-0000-1000-8000-00805F9B34FB", s);
-    s.name = i18n("Human Interface Device");
-    s.icon = "input-mouse";
-    s.mimetype = "application/vnd.kde.bluedevil-input";
-    s.uuid = "00001124-0000-1000-8000-00805F9B34FB";
-    m_supportedServices.insert("00001124-0000-1000-8000-00805F9B34FB", s);
-    s.name = i18n("Headset");
-    s.icon = "audio-headset";
-    s.mimetype = "application/vnd.kde.bluedevil-audio";
-    s.uuid = "00001108-0000-1000-8000-00805F9B34FB";
-    m_supportedServices.insert("00001108-0000-1000-8000-00805F9B34FB", s);
-    s.name = i18n("Dial Up Network");
-    s.icon = "network-wireless";
-    s.mimetype = "application/vnd.kde.bluedevil-network-dun";
-    s.uuid = "00001103-0000-1000-8000-00805F9B34FB";
-    m_supportedServices.insert("00001103-0000-1000-8000-00805F9B34FB", s);
-    s.name = i18n("Personal Area Network");
-    s.icon = "network-wireless";
-    s.mimetype = "application/vnd.kde.bluedevil-network-panu";
-    s.uuid = "00001116-0000-1000-8000-00805F9B34FB";
-    m_supportedServices.insert("00001116-0000-1000-8000-00805F9B34FB", s);
-
-    if (!Manager::self()->defaultAdapter()) {
-        kDebug() << "No available interface";
-        infoMessage(i18n("No Bluetooth adapters have been found."));
-        return;
-    }
 
     kDebug() << "Kio Bluetooth instanced!";
     m_kded = new org::kde::BlueDevil("org.kde.kded", "/modules/bluedevil", QDBusConnection::sessionBus(), 0);
+
+    if (!m_kded->isOnline()) {
+        kDebug() << "Bluetooth is offline";
+        infoMessage(i18n("No Bluetooth adapters have been found."));
+    }
 }
 
 QList<KioBluetooth::Service> KioBluetooth::getSupportedServices(const QStringList &uuids)
@@ -120,14 +96,22 @@ QList<KioBluetooth::Service> KioBluetooth::getSupportedServices(const QStringLis
 
 void KioBluetooth::listRemoteDeviceServices()
 {
-    m_kded->stopDiscovering();
     infoMessage(i18n("Retrieving services..."));
 
     kDebug() << "Listing remote devices";
-    m_currentHost = Manager::self()->defaultAdapter()->deviceForAddress(m_currentHostname.replace('-', ':').toUpper());
-    m_currentHostServices = getSupportedServices(m_currentHost->UUIDs());
+
+    const DeviceInfo &info = m_kded->device(m_currentHostAddress).value();
+    if (info.isEmpty()) {
+        kDebug() << "Invalid hostname!";
+        infoMessage(i18n("This address is unavailable."));
+        finished();
+        return;
+    }
+
+    m_currentHostServices = getSupportedServices(info.value("UUIDs").split(','));
 
     kDebug() << "Num of supported services: " << m_currentHostServices.size();
+
     totalSize(m_currentHostServices.count());
     int i = 1;
     Q_FOREACH (const Service &service, m_currentHostServices) {
@@ -158,25 +142,34 @@ void KioBluetooth::listRemoteDeviceServices()
     }
 
     listEntry(KIO::UDSEntry(), true);
-    infoMessage("");
+    infoMessage(QString());
     finished();
 }
 
 void KioBluetooth::listDevices()
 {
     kDebug() << "Asking kded for devices";
-    QMapDeviceInfo devices = m_kded->knownDevices().value();
+    QMapDeviceInfo devices = m_kded->allDevices().value();
     kDebug() << devices.keys();
+
     Q_FOREACH(const DeviceInfo device, devices) {
         listDevice(device);
     }
+
     listEntry(KIO::UDSEntry(), true);
+
+    m_kded->startDiscovering(10 * 1000);
+
     infoMessage(i18n("Scanning for new devices..."));
     finished();
 }
 
 void KioBluetooth::listDevice(const DeviceInfo device)
 {
+    kDebug() << device;
+    if (getSupportedServices(device["UUIDs"].split(",")).isEmpty()) {
+        return;
+    }
     const QString target = QString("bluetooth://").append(QString(device["address"]).replace(':', '-'));
     KIO::UDSEntry entry;
     entry.insert(KIO::UDSEntry::UDS_URL, target);
@@ -231,24 +224,25 @@ void KioBluetooth::get(const KUrl &url)
     finished();
 }
 
-void KioBluetooth::setHost(const QString &constHostname, quint16 port, const QString &user,
+void KioBluetooth::setHost(const QString &hostname, quint16 port, const QString &user,
                            const QString &pass)
 {
-    kDebug() << "Setting host: " << constHostname;
+    kDebug() << "Setting host: " << hostname;
 
     // In this kio only the hostname (constHostname) is used
     Q_UNUSED(port)
     Q_UNUSED(user)
     Q_UNUSED(pass)
 
-    QString hostname = constHostname;
-    hostname = hostname.replace('-', ':').toUpper();
     if (hostname.isEmpty()) {
         m_hasCurrentHost = false;
     } else {
         m_hasCurrentHost = true;
-        m_currentHostname = constHostname;
         m_currentHostServices.clear();
+
+        m_currentHostname = hostname;
+        m_currentHostAddress = hostname.toUpper();
+        m_currentHostAddress.replace(QLatin1Char('-'), QLatin1Char(':'));
     }
 }
 

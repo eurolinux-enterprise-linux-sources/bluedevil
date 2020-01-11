@@ -2,7 +2,7 @@
 Name:           bluedevil
 Summary:        Bluetooth stack for KDE
 Version:        1.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        GPLv2+
 URL:            https://projects.kde.org/projects/extragear/base/bluedevil
@@ -111,6 +111,9 @@ update-mime-database %{_kde4_datadir}/mime >& /dev/null
 
 
 %changelog
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.3-4
+- Mass rebuild 2013-12-27
+
 * Wed Jun 19 2013 Rex Dieter <rdieter@fedoraproject.org> 1.3-3
 - ExcludeArch: s390 s390x (#975736)
 
